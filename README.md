@@ -1,3 +1,3 @@
 # parallel-labs
-## Akka application designed for remote testing of JS applications.
+## - Akka application designed for remote testing of JS applications.
 State: in progress

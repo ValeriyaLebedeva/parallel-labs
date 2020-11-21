@@ -1,2 +1,2 @@
-##Akka application designed for remote testing of JS applications.
-####Status: in progress
+#Akka application designed for remote testing of JS applications.
+##Status: in progress

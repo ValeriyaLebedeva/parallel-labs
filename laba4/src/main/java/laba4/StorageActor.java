@@ -12,7 +12,16 @@ import java.util.Map;
 public class StorageActor extends AbstractActor {
 
     public static class Result {
-        result
+        String testName;
+        Boolean status;
+        String responseMsg;
+
+        public Result(String testName, Boolean status, String result, String expectedResult) {
+            this.testName = testName;
+            this.status = status;
+            this.result = result;
+            this.expectedResult = expectedResult;
+        }
     }
 
     private Map<String, ArrayList<Result>> storage = new HashMap<>();;

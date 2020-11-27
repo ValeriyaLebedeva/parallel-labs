@@ -20,7 +20,7 @@ public class JsScriptTester {
 
     public static void main(String[] args) throws Exception {
         ActorSystem system = ActorSystem.create("JsScriptTesting");
-        ActorRef storegeActor = system.actorOf(Props.create(StoreActor.class), "store");
+        ActorRef storageActor = system.actorOf(Props.create(StoreActor.class), "store");
         final Http http = Http.get(system);
         final ActorMaterializer materializer = ActorMaterializer.create(system);
         router = JsTestsRouters(system, storageActor);

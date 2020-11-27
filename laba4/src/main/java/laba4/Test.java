@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Test {
     public final String testName;
     public final expectedResult;
-    public final 
+    public final params 
 
     @JsonCreator
     public Message(@JsonProperty("packageId") String packageId, @JsonProperty("jsScript") String jsScript, @JsonProperty("functionName") String functionName, @JsonProperty("tests") ArrayList<Test> tests) {

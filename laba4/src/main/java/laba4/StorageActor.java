@@ -13,7 +13,7 @@ public class StorageActor extends AbstractActor {
     private Map<String, ArrayList<Result>> storage = new HashMap<>();
 
     public static class Results {
-        
+        private final Map
     }
 
     public static class Result {

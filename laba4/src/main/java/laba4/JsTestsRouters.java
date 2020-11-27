@@ -65,8 +65,29 @@ public class UserRoutes {
                                                             log.info("Create result: {}", performed.description);
                                                             return complete(StatusCodes.CREATED, performed, Jackson.marshaller());
                                                         })
-                                        )))
-                ));
+                                        ))),
+                        pathPrefix("getresult", () ->
+                                concat(
+                                        pathEnd(() ->
+                                                get(() ->
+                                                        onSuccess(getResults(),
+                                                                tests -> complete(StatusCodes.OK, tests, Jackson.marshaller())
+                                                        )
+                                                )
+                                        ),
+                                        path(PathMatchers.segment(), (String packageId) ->
+                                                get(() ->
+                                                        rejectEmptyResponse(() ->
+                                                                onSuccess(getResult(packageId), performed ->
+                                                                        complete(StatusCodes.OK, performed.maybeResult, Jackson.marshaller())
+                                                                )
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                )
+        );
     }
 
 

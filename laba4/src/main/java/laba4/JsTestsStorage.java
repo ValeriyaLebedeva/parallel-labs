@@ -8,8 +8,8 @@ public class JsTestsStorage extends AbstractBehavior<JsTestsStorage.Command>  {
 
     interface Command {}
 
-    public final static class CreateUser implements JsTestsStorage.Command {
-        public final UserRegistry.User user;
+    public final static class ExecuteProgram implements JsTestsStorage.Command {
+        public final JsTestsStorage.Test user;
         public final ActorRef<UserRegistry.ActionPerformed> replyTo;
         public CreateUser(UserRegistry.User user, ActorRef<UserRegistry.ActionPerformed> replyTo) {
             this.user = user;

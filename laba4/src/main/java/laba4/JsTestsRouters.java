@@ -29,13 +29,15 @@ public class JsTestsRouters {
     private final static Logger log = LoggerFactory.getLogger(JsTestsStorage.class);
     private final ActorRef storageActor;
     private final static Timeout timeout = Timeout.create(Duration.ofSeconds(5));
+    ActorSystem system;
 
 
     public JsTestsRouters(ActorSystem system, ActorRef storageActor) {
         this.storageActor = storageActor;
+        this.system = system;
     }
 
-    public Route jsTestsRoutes() {
+    public Route getRouters() {
         return pathPrefix("test", () ->
                 concat(
                         pathPrefix("execute", () ->

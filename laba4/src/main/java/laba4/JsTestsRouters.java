@@ -45,11 +45,9 @@ public class JsTestsRouters {
                                         entity(
                                                 Jackson.unmarshaller(Message.class),
                                                 msg ->
-                                                        StorageActor
-                                                        onSuccess(ExecuteTests(msg), performed -> {
-                                                            log.info("Create result: {}", performed.description);
-                                                            return complete(StatusCodes.CREATED, performed, Jackson.marshaller());
-                                                        })
+                                                        StorageActor.tell(msg);
+
+
                                         ))),
                         pathPrefix("getresult", () ->
                                 concat(

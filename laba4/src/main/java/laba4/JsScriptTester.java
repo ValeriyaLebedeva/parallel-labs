@@ -9,42 +9,31 @@ import akka.actor.typed.javadsl.Behaviors;
 import akka.http.javadsl.Http;
 import akka.http.javadsl.ServerBinding;
 import akka.http.javadsl.server.Route;
+import akka.stream.ActorMaterializer;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.CompletionStage;
 
 public class JsScriptTester {
-    static void startHttpServer(Route route, ActorSystem system) {
-        CompletionStage<ServerBinding> futureBinding =
-                Http.get(system).newServerAt("localhost", 8080).bind(route);
-
-        futureBinding.whenComplete((binding, exception) -> {
-            if (binding != null) {
-                InetSocketAddress address = binding.localAddress();
-                system.log().info("Server online at http://{}:{}/",
-                        address.getHostString(),
-                        address.getPort());
-            } else {
-                system.log().error("Failed to bind HTTP endpoint, terminating system", exception);
-                system.terminate();
-            }
-        });
-    }
-    // #start-http-server
+    final static String ADDRESS = "localhost";
+    final static String PORT = "8080";
 
     public static void main(String[] args) throws Exception {
-        //#server-bootstrapping
-        Behavior<NotUsed> rootBehavior = Behaviors.setup(context -> {
-            ActorRef storeActor = system.actorOf(Props.create(StorageActor.class), "store");
+        ActorSystem system = ActorSystem.create("JsScriptTesting");
+        ActorRef storegeActor = system.actorOf(Props.create(StoreActor.class), "store");
+        final Http http = Http.get(system);
+        final ActorMaterializer materializer = ActorMaterializer.create(system);
+        router = JsTestsRouters(system, storageActor);
+        TestingServer server = new TestingServer(system);
+        final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = server.getRoute().flow(system, materializer);
+        final CompletionStage<ServerBinding> binding = http.bindAndHandle(
+                routeFlow, ConnectHttp.toHost(IP_ADDR, PORT), materializer
+        );
 
-            UserRoutes userRoutes = new UserRoutes(context.getSystem(), userRegistryActor);
-            startHttpServer(userRoutes.userRoutes(), context.getSystem());
-
-            return Behaviors.empty();
-        });
-
-        // boot up server using the route as defined below
-        ActorSystem.create(rootBehavior, "HelloAkkaHttpServer");
-        //#server-bootstrapping
+        System.out.printf("Server listening on %s:%d\n", IP_ADDR, PORT);
+        System.out.println("Press ENTER to exit\n");
+        System.in.read();
+        binding.thenCompose(ServerBinding::unbind).thenAccept(unbound -> system.terminate());
     }
+
 }

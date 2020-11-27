@@ -67,7 +67,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.6.0</version>
                 <configuration>
-                    <mainClass>laba4.JsScriptTester</mainClass>
+                    <mainClass>com.example.QuickstartApp</mainClass>
                 </configuration>
             </plugin>
         </plugins>

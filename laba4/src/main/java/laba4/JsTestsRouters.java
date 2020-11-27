@@ -37,26 +37,6 @@ public class JsTestsRouters {
         askTimeout = system.settings().config().getDuration("my-app.routes.ask-timeout");
     }
 
-    private ExecuteTests
-
-
-    private CompletionStage<UserRegistry.GetUserResponse> getUser(String name) {
-        return AskPattern.ask(userRegistryActor, ref -> new UserRegistry.GetUser(name, ref), askTimeout, scheduler);
-    }
-
-    private CompletionStage<UserRegistry.ActionPerformed> deleteUser(String name) {
-        return AskPattern.ask(userRegistryActor, ref -> new UserRegistry.DeleteUser(name, ref), askTimeout, scheduler);
-    }
-
-    private CompletionStage<UserRegistry.Users> getUsers() {
-        return AskPattern.ask(userRegistryActor, UserRegistry.GetUsers::new, askTimeout, scheduler);
-    }
-
-    private CompletionStage<UserRegistry.ActionPerformed> createUser(User user) {
-        return AskPattern.ask(userRegistryActor, ref -> new UserRegistry.CreateUser(user, ref), askTimeout, scheduler);
-    }
-
-
     public Route jsTestsRoutes() {
         return pathPrefix("testjsscript", () ->
                 concat(

@@ -1,2 +1,4 @@
-package laba4;public class Message {
+package laba4;
+
+public class Message {
 }

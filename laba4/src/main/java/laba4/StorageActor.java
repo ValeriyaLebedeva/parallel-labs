@@ -12,7 +12,7 @@ import java.util.Map;
 public class StorageActor extends AbstractActor {
 
     public static class Result {
-
+        
     }
 
     private Map<String, ArrayList<Result>> storage = new HashMap<>();;

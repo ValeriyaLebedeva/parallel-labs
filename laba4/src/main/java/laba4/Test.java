@@ -7,14 +7,13 @@ import java.util.ArrayList;
 
 public class Test {
     public final String testName;
-    public final expectedResult;
-    public final params 
+    public final String expectedResult;
+    public final ArrayList<Integer> params;
 
     @JsonCreator
-    public Message(@JsonProperty("packageId") String packageId, @JsonProperty("jsScript") String jsScript, @JsonProperty("functionName") String functionName, @JsonProperty("tests") ArrayList<Test> tests) {
-        this.packageId = packageId;
-        this.jsScript = jsScript;
-        this.functionName = functionName;
-        this.tests = tests;
+    public Test(@JsonProperty("tesName") String testName, @JsonProperty("expectedResult") String expectedResult, @JsonProperty("tests") ArrayList<Integer> params) {
+        this.testName = testName;
+        this.expectedResult = expectedResult;
+        this.params = params;
     }
 }

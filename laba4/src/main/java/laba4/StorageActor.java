@@ -10,6 +10,7 @@ import java.util.Map;
 
 
 public class StorageActor extends AbstractActor {
+    private Map<String, ArrayList<Result>> storage = new HashMap<>();
 
     public static class Result {
         String testName;
@@ -20,19 +21,23 @@ public class StorageActor extends AbstractActor {
             if (result.equals(expectedResult)) {
                 this.responseMsg = "OK";
             } else {
-                this.responseMsg = "Expected: %s, but received: %s"
+                this.responseMsg = String.format("Expected: %s, but received: %s",
+                        expectedResult, result);
             }
         }
     }
 
-    private Map<String, ArrayList<Result>> storage = new HashMap<>();;
 
     private String executeTests(ExecuteMessage msg) {
         return "OK";
     }
 
     private String getResults(String id) {
-        return "Some result";
+        if (!storage.containsKey(id)) {
+            return "No such packageId in storage";
+        } else {
+            return 
+        }
     }
 
     @Override

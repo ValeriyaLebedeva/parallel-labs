@@ -9,7 +9,7 @@ public class Message {
     public final String packageId;
     public final String jsScript;
     public final String functionName;
-    public final String tests;
+    public final ArrayList<Test> tests;
     @JsonCreator
     public Message(@JsonProperty("packageId") String packageId, @JsonProperty("jsScript") String jsScript, @JsonProperty("functionName") String functionName, @JsonProperty("tests") ArrayList<Test> tests) {
         this.packageId = packageId;

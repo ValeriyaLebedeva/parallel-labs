@@ -3,7 +3,9 @@ package laba4;
 import java.time.Duration;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
+import java.util.regex.Pattern;
 
+import akka.pattern.Patterns;
 import com.example.UserRegistry.User;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
@@ -44,18 +46,18 @@ public class JsTestsRouters {
                                 post(() ->
                                         entity(
                                                 Jackson.unmarshaller(Message.class),
-                                                msg ->
-                                                        StorageActor.tell(msg);
-
+                                                msg -> {
+                                                    Patterns.ask(storageActor, msg, askTimeout);
+                                                    return complete("Executed");
+                                                }
 
                                         ))),
                         pathPrefix("getresult", () ->
                                 concat(
                                         pathEnd(() ->
-                                                get(() ->
-                                                        onSuccess(getResults(),
-                                                                tests -> complete(StatusCodes.OK, tests, Jackson.marshaller())
-                                                        )
+                                                get(() -> {
+
+                                                        }
                                                 )
                                         ),
                                         path(PathMatchers.segment(), (String packageId) ->

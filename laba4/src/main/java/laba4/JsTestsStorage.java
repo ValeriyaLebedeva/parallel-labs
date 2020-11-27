@@ -1,9 +1,22 @@
 package laba4;
 
+import com.example.UserRegistry;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class JsTest extends AbstractBehavior<JsTest.Command>  {
+public class JsTestsStorage extends AbstractBehavior<JsTestsStorage.Command>  {
+
+    interface Command {}
+
+    public final static class CreateUser implements JsTestsStorage.Command {
+        public final UserRegistry.User user;
+        public final ActorRef<UserRegistry.ActionPerformed> replyTo;
+        public CreateUser(UserRegistry.User user, ActorRef<UserRegistry.ActionPerformed> replyTo) {
+            this.user = user;
+            this.replyTo = replyTo;
+        }
+    }
+
     public final static class Test {
         public final String packageId;
         public final String jsScript;

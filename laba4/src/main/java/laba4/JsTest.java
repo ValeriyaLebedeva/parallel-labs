@@ -9,7 +9,7 @@ public class JsTest {
         public final int age;
         public final String countryOfResidence;
         @JsonCreator
-        public User(@JsonProperty("name") String name, @JsonProperty("age") int age, @JsonProperty("countryOfRecidence") String countryOfResidence) {
+        public User(@JsonProperty("packageID") String name, @JsonProperty("age") int age, @JsonProperty("countryOfRecidence") String countryOfResidence) {
             this.name = name;
             this.age = age;
             this.countryOfResidence = countryOfResidence;

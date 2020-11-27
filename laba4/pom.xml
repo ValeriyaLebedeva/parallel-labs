@@ -2,7 +2,7 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>lba4</groupId>
+    <groupId>laba4</groupId>
     <artifactId>akka-http-seed-java</artifactId>
     <version>1.0</version>
 

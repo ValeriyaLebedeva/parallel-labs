@@ -2,7 +2,7 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.example</groupId>
+    <groupId>laba4</groupId>
     <artifactId>akka-http-seed-java</artifactId>
     <version>1.0</version>
 
@@ -67,7 +67,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.6.0</version>
                 <configuration>
-                    <mainClass>com.example.QuickstartApp</mainClass>
+                    <mainClass>laba4.JsScriptTester</mainClass>
                 </configuration>
             </plugin>
         </plugins>

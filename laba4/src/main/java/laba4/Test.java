@@ -6,7 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 
 public class Test {
-    public final String 
+    public final String testName;
+    
+
     @JsonCreator
     public Message(@JsonProperty("packageId") String packageId, @JsonProperty("jsScript") String jsScript, @JsonProperty("functionName") String functionName, @JsonProperty("tests") ArrayList<Test> tests) {
         this.packageId = packageId;

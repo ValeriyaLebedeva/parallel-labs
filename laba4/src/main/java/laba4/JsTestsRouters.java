@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 //#user-routes-class
 public class JsTestsRouters {
     //#user-routes-class
-    private final static Logger log = LoggerFactory.getLogger(JsTestsStorage.class);
     private final ActorRef storageActor;
     private final static Timeout timeout = Timeout.create(Duration.ofSeconds(5));
     ActorSystem system;

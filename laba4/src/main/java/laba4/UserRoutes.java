@@ -26,12 +26,12 @@ import org.slf4j.LoggerFactory;
 public class UserRoutes {
   //#user-routes-class
   private final static Logger log = LoggerFactory.getLogger(UserRoutes.class);
-  private final ActorRef<UserRegistry.Command> userRegistryActor;
+  private final ActorRef storageActor;
   private final Duration askTimeout;
   private final Scheduler scheduler;
 
-  public UserRoutes(ActorSystem<?> system, ActorRef<UserRegistry.Command> userRegistryActor) {
-    this.userRegistryActor = userRegistryActor;
+  public UserRoutes(ActorSystem system, ActorRef storageActor) {
+    this.storageActor = storageActor;
     scheduler = system.scheduler();
     askTimeout = system.settings().config().getDuration("my-app.routes.ask-timeout");
   }

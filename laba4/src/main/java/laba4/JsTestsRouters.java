@@ -5,9 +5,9 @@ import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 import com.example.UserRegistry.User;
-import akka.actor.typed.ActorRef;
-import akka.actor.typed.ActorSystem;
-import akka.actor.typed.Scheduler;
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+import akka.actor.Scheduler;
 import akka.actor.typed.javadsl.AskPattern;
 import akka.http.javadsl.marshallers.jackson.Jackson;
 
@@ -27,15 +27,18 @@ import org.slf4j.LoggerFactory;
 public class JsTestsRouters {
     //#user-routes-class
     private final static Logger log = LoggerFactory.getLogger(JsTestsStorage.class);
-    private final ActorRef<UserRegistry.Command> userRegistryActor;
+    private final ActorRef storageActor;
     private final Duration askTimeout;
     private final Scheduler scheduler;
 
-    public UserRoutes(ActorSystem<?> system, ActorRef<UserRegistry.Command> userRegistryActor) {
-        this.userRegistryActor = userRegistryActor;
+    public JsTestsRouters(ActorSystem system, ActorRef storageActor) {
+        this.storageActor = storageActor;
         scheduler = system.scheduler();
         askTimeout = system.settings().config().getDuration("my-app.routes.ask-timeout");
     }
+
+    private ExecuteTests
+
 
     private CompletionStage<UserRegistry.GetUserResponse> getUser(String name) {
         return AskPattern.ask(userRegistryActor, ref -> new UserRegistry.GetUser(name, ref), askTimeout, scheduler);

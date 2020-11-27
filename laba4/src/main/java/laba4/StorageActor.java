@@ -12,6 +12,10 @@ import java.util.Map;
 public class StorageActor extends AbstractActor {
     private Map<String, ArrayList<Result>> storage = new HashMap<>();
 
+    public static class Results {
+        
+    }
+
     public static class Result {
         String testName;
         String responseMsg;
@@ -36,7 +40,7 @@ public class StorageActor extends AbstractActor {
         if (!storage.containsKey(id)) {
             return "No such packageId in storage";
         } else {
-            return 
+            return
         }
     }
 

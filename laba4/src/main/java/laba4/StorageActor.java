@@ -12,13 +12,10 @@ import java.util.Map;
 public class StorageActor extends AbstractActor {
     private Map<String, ArrayList<Result>> storage = new HashMap<>();
 
-    public static class Results {
-        private final Map
-    }
 
     public static class Result {
-        String testName;
-        String responseMsg;
+        private final String testName;
+        private final String responseMsg;
 
         public Result(String testName, String result, String expectedResult) {
             this.testName = testName;
@@ -28,6 +25,14 @@ public class StorageActor extends AbstractActor {
                 this.responseMsg = String.format("Expected: %s, but received: %s",
                         expectedResult, result);
             }
+        }
+
+        public String getTestName() {
+            return testName;
+        }
+
+        public String getResponseMsg() {
+            return responseMsg;
         }
     }
 

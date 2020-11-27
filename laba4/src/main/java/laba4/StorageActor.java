@@ -10,7 +10,7 @@ import java.util.Map;
 
 
 public class StorageActor extends AbstractActor {
-    private Map<String, ArrayList<Result>> storage = new HashMap<>();
+    private final Map<String, ArrayList<Result>> storage = new HashMap<>();
 
 
     public static class Result {
@@ -36,18 +36,10 @@ public class StorageActor extends AbstractActor {
         }
     }
 
-
     private String executeTests(ExecuteMessage msg) {
         return "OK";
     }
 
-    private String getResults(String id) {
-        if (!storage.containsKey(id)) {
-            return "No such packageId in storage";
-        } else {
-            return
-        }
-    }
 
     @Override
     public Receive createReceive() {
@@ -55,8 +47,13 @@ public class StorageActor extends AbstractActor {
                 .match(ExecuteMessage.class, msg -> sender().tell(
                         executeTests(msg), self())
                 )
-                .match(String.class, id -> sender().tell(
-                        getResults(id), self())
+                .match(String.class, id -> {
+                            if (!storage.containsKey(id)) {
+                                sender().tell("No such packageId in storage", self());
+                            } else {
+                                sender().tell(storage.get(id), self());
+                            }
+                        }
                 )
                 .build();
     }

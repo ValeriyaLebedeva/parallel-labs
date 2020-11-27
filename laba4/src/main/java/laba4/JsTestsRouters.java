@@ -1,4 +1,4 @@
-package com.example;
+package laba4;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -16,6 +16,7 @@ import static akka.http.javadsl.server.Directives.*;
 import akka.http.javadsl.model.StatusCodes;
 import akka.http.javadsl.server.PathMatchers;
 import akka.http.javadsl.server.Route;
+import laba4.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,9 +24,9 @@ import org.slf4j.LoggerFactory;
  * Routes can be defined in separated classes like shown in here
  */
 //#user-routes-class
-public class UserRoutes {
+public class JsTestsRouters {
     //#user-routes-class
-    private final static Logger log = LoggerFactory.getLogger(UserRoutes.class);
+    private final static Logger log = LoggerFactory.getLogger(JsTestsStorage.class);
     private final ActorRef<UserRegistry.Command> userRegistryActor;
     private final Duration askTimeout;
     private final Scheduler scheduler;
@@ -59,9 +60,10 @@ public class UserRoutes {
                         pathPrefix("execute", () ->
                                 post(() ->
                                         entity(
-                                                Jackson.unmarshaller(ProgramTest.class),
-                                                user ->
-                                                        onSuccess(ExecuteTests(user), performed -> {
+                                                Jackson.unmarshaller(Message.class),
+                                                msg ->
+                                                        StorageActor
+                                                        onSuccess(ExecuteTests(msg), performed -> {
                                                             log.info("Create result: {}", performed.description);
                                                             return complete(StatusCodes.CREATED, performed, Jackson.marshaller());
                                                         })
@@ -89,65 +91,5 @@ public class UserRoutes {
                 )
         );
     }
-
-
-
-
-    /**
-     * This method creates one route (of possibly many more that will be part of your Web App)
-     */
-    //#all-routes
-    public Route userRoutes() {
-        return pathPrefix("users", () ->
-                concat(
-                        //#users-get-delete
-                        pathEnd(() ->
-                                concat(
-                                        get(() ->
-                                                onSuccess(getUsers(),
-                                                        users -> complete(StatusCodes.OK, users, Jackson.marshaller())
-                                                )
-                                        ),
-                                        post(() ->
-                                                entity(
-                                                        Jackson.unmarshaller(User.class),
-                                                        user ->
-                                                                onSuccess(createUser(user), performed -> {
-                                                                    log.info("Create result: {}", performed.description);
-                                                                    return complete(StatusCodes.CREATED, performed, Jackson.marshaller());
-                                                                })
-                                                )
-                                        )
-                                )
-                        ),
-                        //#users-get-delete
-                        //#users-get-post
-                        path(PathMatchers.segment(), (String name) ->
-                                concat(
-                                        get(() ->
-                                                        //#retrieve-user-info
-                                                        rejectEmptyResponse(() ->
-                                                                onSuccess(getUser(name), performed ->
-                                                                        complete(StatusCodes.OK, performed.maybeUser, Jackson.marshaller())
-                                                                )
-                                                        )
-                                                //#retrieve-user-info
-                                        ),
-                                        delete(() ->
-                                                        //#users-delete-logic
-                                                        onSuccess(deleteUser(name), performed -> {
-                                                                    log.info("Delete result: {}", performed.description);
-                                                                    return complete(StatusCodes.OK, performed, Jackson.marshaller());
-                                                                }
-                                                        )
-                                                //#users-delete-logic
-                                        )
-                                )
-                        )
-                        //#users-get-post
-                )
-        );
-    }
-    //#all-routes
 
 }

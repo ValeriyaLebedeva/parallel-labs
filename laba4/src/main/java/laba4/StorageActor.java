@@ -1,2 +1,4 @@
-package laba4;public class StorageActor {
+package laba4;
+
+public class StorageActor {
 }

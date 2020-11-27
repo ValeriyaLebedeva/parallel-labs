@@ -13,14 +13,15 @@ public class StorageActor extends AbstractActor {
 
     public static class Result {
         String testName;
-        Boolean status;
         String responseMsg;
 
-        public Result(String testName, Boolean status, String result, String expectedResult) {
+        public Result(String testName, String result, String expectedResult) {
             this.testName = testName;
-            this.status = status;
-            this.result = result;
-            this.expectedResult = expectedResult;
+            if (result.equals(expectedResult)) {
+                this.responseMsg = "OK";
+            } else {
+                this.responseMsg = "Expected: %s, but received: %s"
+            }
         }
     }
 

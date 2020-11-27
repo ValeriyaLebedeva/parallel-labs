@@ -2,6 +2,10 @@ package laba4;
 
 import java.time.Duration;
 
+import akka.util.Timeout;
+import scala.concurrent.Future;
+
+
 import akka.pattern.Patterns;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
@@ -24,33 +28,31 @@ public class JsTestsRouters {
     //#user-routes-class
     private final static Logger log = LoggerFactory.getLogger(JsTestsStorage.class);
     private final ActorRef storageActor;
-    private final Duration askTimeout;
-    private final Scheduler scheduler;
+    private final static Timeout timeout = Timeout.create(Duration.ofSeconds(5));
+
 
     public JsTestsRouters(ActorSystem system, ActorRef storageActor) {
         this.storageActor = storageActor;
-        scheduler = system.scheduler();
-        askTimeout = system.settings().config().getDuration("my-app.routes.ask-timeout");
     }
 
     public Route jsTestsRoutes() {
-        return pathPrefix("testjsscript", () ->
+        return pathPrefix("test", () ->
                 concat(
                         pathPrefix("execute", () ->
                                 post(() ->
                                         entity(
                                                 Jackson.unmarshaller(ExecuteMessage.class),
                                                 msg -> {
-                                                    Patterns.ask(storageActor, msg, askTimeout);
+                                                    Patterns.ask(storageActor, msg, timeout);
                                                     return complete("Executed");
                                                 }
 
                                         ))),
-                        pathPrefix("getresult", () ->
+                        pathPrefix("result", () ->
                                 path(PathMatchers.segment(), (String packageId) ->
                                         get(() -> {
-                                            Patterns.ask(storageActor, packageId, askTimeout);
-                                            return complete("Executed");
+                                            Future<Object> future = Patterns.ask(storageActor, packageId, timeout);
+                                            return completeOKWithFuture(future, Jackson.marshaller());
                                                 }
                                         )
                                 )

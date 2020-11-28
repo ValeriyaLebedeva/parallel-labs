@@ -1,5 +1,5 @@
-# parallel-labs
-## - Akka application with akka http designed for remote testing of JS applications.
+# Parallel labs for course 
+## [Laba 4] Akka application with akka http designed for remote testing of JS applications.
 #####State: Done
 Compile and start:
 ```
@@ -15,4 +15,5 @@ Output: Executed
 ```
 curl -X GET localhost:8082/test/result/13
 ```
-Output 
+Output:
+[{"responseMsg":"OK","testName":"test1"},{"responseMsg":"test2: Expected: 2.0, but received: 2.5","testName":"test2"}]

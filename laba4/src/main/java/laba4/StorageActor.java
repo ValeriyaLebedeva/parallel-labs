@@ -19,8 +19,9 @@ import java.util.Map;
 
 public class StorageActor extends AbstractActor {
     public static final int NUMBER_BALANCING_POOL = 5;
+    private final static Timeout TIMEOUT = Timeout.create(Duration.ofSeconds(5));
+
     private final Map<String, ArrayList<Result>> storage = new HashMap<>();
-    private final static Timeout timeout = Timeout.create(Duration.ofSeconds(5));
 
     public static class Result {
         private final String testName;
@@ -53,9 +54,9 @@ public class StorageActor extends AbstractActor {
         try {
             System.out.println(msg.getTests().size());
             for (Test t: msg.getTests()) {
-                Future<Object> future = Patterns.ask(executorActors, new ExecuteTest(t, msg.getJsScript(), msg.getFunctionName()), timeout);
+                Future<Object> future = Patterns.ask(executorActors, new ExecuteTest(t, msg.getJsScript(), msg.getFunctionName()), TIMEOUT);
                 Result result;
-                result = new Result(t.getTestName(), (String) Await.result(future, timeout.duration()), t.getExpectedResult());
+                result = new Result(t.getTestName(), (String) Await.result(future, TIMEOUT.duration()), t.getExpectedResult());
                 System.out.printf("Executed test %s, result: %s%n", t.getTestName(), result.responseMsg);
                 results.add(result);
             }

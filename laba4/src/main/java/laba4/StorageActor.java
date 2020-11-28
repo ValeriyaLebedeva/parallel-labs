@@ -6,9 +6,11 @@ import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.japi.pf.ReceiveBuilder;
 import akka.pattern.Patterns;
+import akka.util.Timeout;
 import scala.concurrent.Future;
 
 import java.lang.reflect.Array;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +18,7 @@ import java.util.Map;
 
 public class StorageActor extends AbstractActor {
     private final Map<String, ArrayList<Result>> storage = new HashMap<>();
-
+    private final static Timeout timeout = Timeout.create(Duration.ofSeconds(5));
 
     public static class Result {
         private final String testName;
@@ -43,10 +45,9 @@ public class StorageActor extends AbstractActor {
 
     private String executeTests(ExecuteMessage msg) {
         ActorSystem system = ActorSystem.create("ExecuteTesting");
-        ActorRef executorActor = system.actorOf(Props.create(ExecutorActor.class), "");
         for (Test t: msg.getTests()) {
             ActorRef executorActor = system.actorOf(Props.create(ExecutorActor.class), t.getTestName());
-            Future<Object> future = Patterns.ask(executorActor, packageId, timeout);
+            Future<Object> future = Patterns.ask(executorActor, new ExecuteTest(t, msg.getJsScript(), msg.getFunctionName()), timeout);
         }
         return "OK";
     }

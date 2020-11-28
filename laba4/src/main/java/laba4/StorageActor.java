@@ -16,6 +16,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 
 public class StorageActor extends AbstractActor {
@@ -45,14 +46,15 @@ public class StorageActor extends AbstractActor {
         }
     }
 
-    private String executeTests(ExecuteMessage msg) {
+    private String executeTests(ExecuteMessage msg) throws TimeoutException, InterruptedException {
         ActorSystem system = ActorSystem.create("ExecuteTesting");
         ActorRef executorActors = system.actorOf(new BalancingPool(5).props(
                 Props.create(ExecutorActor.class)), "testAggregator");
         for (Test t: msg.getTests()) {
             Future<Object> future = Patterns.ask(executorActors, new ExecuteTest(t, msg.getJsScript(), msg.getFunctionName()), timeout);
-            result = (StoreMessage) Await.result(future, timeout);
-            System.out.println(future);
+            String result;
+            result = (String) Await.result(future, timeout.duration());
+            System.out.println(result);
         }
         return "OK";
     }

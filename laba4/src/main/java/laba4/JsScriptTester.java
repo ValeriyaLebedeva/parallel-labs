@@ -31,7 +31,6 @@ public class JsScriptTester {
         );
 
         System.out.printf("Server listening on %s:%d\n", ADDRESS, PORT);
-        System.out.println("Press ENTER to exit\n");
         System.in.read();
         binding.thenCompose(ServerBinding::unbind).thenAccept(unbound -> system.terminate());
     }

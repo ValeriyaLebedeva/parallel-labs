@@ -3,5 +3,6 @@
 #####State: Done
 Compile and start:
 ```
-
+mvn compile
+mvn 
 ```

@@ -3,6 +3,7 @@
 #####State: Done
 Compile and start:
 ```
+cd laba4
 mvn compile
 mvn exec:java -Dexec.mainClass="laba4.JsScriptTester"
 ```

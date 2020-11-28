@@ -56,8 +56,9 @@ public class StorageActor extends AbstractActor {
                 String result;
                 result = (String) Await.result(future, timeout.duration());
                 System.out.println(result);
-        } ca
-
+            }
+        } catch (Exception e) {
+            return e.toString();
         }
         return "OK";
     }

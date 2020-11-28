@@ -1,7 +1,12 @@
 package laba4;
 
 import akka.actor.AbstractActor;
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+import akka.actor.Props;
 import akka.japi.pf.ReceiveBuilder;
+import akka.pattern.Patterns;
+import scala.concurrent.Future;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -37,6 +42,12 @@ public class StorageActor extends AbstractActor {
     }
 
     private String executeTests(ExecuteMessage msg) {
+        ActorSystem system = ActorSystem.create("ExecuteTesting");
+        ActorRef executorActor = system.actorOf(Props.create(ExecutorActor.class), "");
+        for (Test t: msg.getTests()) {
+            ActorRef executorActor = system.actorOf(Props.create(ExecutorActor.class), t.getTestName());
+            Future<Object> future = Patterns.ask(executorActor, packageId, timeout);
+        }
         return "OK";
     }
 

@@ -8,6 +8,7 @@ import akka.japi.pf.ReceiveBuilder;
 import akka.pattern.Patterns;
 import akka.routing.BalancingPool;
 import akka.util.Timeout;
+import scala.concurrent.Await;
 import scala.concurrent.Future;
 
 import java.lang.reflect.Array;
@@ -50,6 +51,7 @@ public class StorageActor extends AbstractActor {
                 Props.create(ExecutorActor.class)), "testAggregator");
         for (Test t: msg.getTests()) {
             Future<Object> future = Patterns.ask(executorActors, new ExecuteTest(t, msg.getJsScript(), msg.getFunctionName()), timeout);
+            result = (StoreMessage) Await.result(future, timeout);
             System.out.println(future);
         }
         return "OK";

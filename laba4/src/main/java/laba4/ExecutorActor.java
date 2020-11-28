@@ -8,7 +8,7 @@ import javax.script.ScriptEngineManager;
 
 public class ExecutorActor extends AbstractActor {
 
-    private String executeTest(Test t) {
+    private String executeTest(ExecuteTest t) {
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
         engine.eval(t.);
         Invocable invocable = (Invocable) engine;
@@ -19,7 +19,7 @@ public class ExecutorActor extends AbstractActor {
     @Override
     public Receive createReceive() {
         ReceiveBuilder.create()
-                .match(Test.class, t -> sender().tell(
+                .match(ExecuteTest.class, t -> sender().tell(
                         executeTest(t), self())
                 )
                 .build();

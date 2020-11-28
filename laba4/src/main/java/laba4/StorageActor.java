@@ -18,6 +18,7 @@ import java.util.Map;
 
 
 public class StorageActor extends AbstractActor {
+    public static final int NUMBER_BALANCING_POOL = 5;
     private final Map<String, ArrayList<Result>> storage = new HashMap<>();
     private final static Timeout timeout = Timeout.create(Duration.ofSeconds(5));
 
@@ -46,7 +47,7 @@ public class StorageActor extends AbstractActor {
 
     private String executeTests(ExecuteMessage msg) {
         ActorSystem system = ActorSystem.create("ExecuteTesting");
-        ActorRef executorActors = system.actorOf(new BalancingPool(5).props(
+        ActorRef executorActors = system.actorOf(new BalancingPool(NUMBER_BALANCING_POOL).props(
                 Props.create(ExecutorActor.class)), "testAggregator");
        ArrayList<Result> results = new ArrayList<>();
         try {

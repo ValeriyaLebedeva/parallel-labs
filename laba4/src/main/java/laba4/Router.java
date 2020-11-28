@@ -1,8 +1,10 @@
 package laba4;
 
 import java.time.Duration;
+import java.util.concurrent.TimeoutException;
 
 import akka.util.Timeout;
+import scala.concurrent.Await;
 import scala.concurrent.Future;
 
 
@@ -44,8 +46,13 @@ public class Router {
                                         entity(
                                                 Jackson.unmarshaller(ExecuteMessage.class),
                                                 msg -> {
-                                                    Patterns.ask(storageActor, msg, timeout);
-                                                    return complete("Executed");
+                                                    Future<Object> future = Patterns.ask(storageActor, msg, timeout);
+                                                    String result;
+                                                    try {
+                                                        result = (String) Await.result(future, timeout.duration());
+                                                    } catch (Exception e) {
+                                                        return complete(e.toString());
+                                                    return complete(result);
                                                 }
 
                                         ))),

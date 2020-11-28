@@ -50,6 +50,7 @@ public class StorageActor extends AbstractActor {
                 Props.create(ExecutorActor.class)), "testAggregator");
         for (Test t: msg.getTests()) {
             Future<Object> future = Patterns.ask(executorActors, new ExecuteTest(t, msg.getJsScript(), msg.getFunctionName()), timeout);
+            System.out.println(future);
         }
         return "OK";
     }

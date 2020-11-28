@@ -46,7 +46,7 @@ public class StorageActor extends AbstractActor {
         }
     }
 
-    private String executeTests(ExecuteMessage msg) throws TimeoutException, InterruptedException {
+    private String executeTests(ExecuteMessage msg) {
         ActorSystem system = ActorSystem.create("ExecuteTesting");
         ActorRef executorActors = system.actorOf(new BalancingPool(5).props(
                 Props.create(ExecutorActor.class)), "testAggregator");

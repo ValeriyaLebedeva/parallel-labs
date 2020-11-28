@@ -46,11 +46,10 @@ public class StorageActor extends AbstractActor {
 
     private String executeTests(ExecuteMessage msg) {
         ActorSystem system = ActorSystem.create("ExecuteTesting");
-        ActorRef testAggregatorActor = system.actorOf(new BalancingPool(5).props(
-                Props.create(TesterActor.class)), "testAggregator");
+        ActorRef executorActors = system.actorOf(new BalancingPool(5).props(
+                Props.create(ExecutorActor.class)), "testAggregator");
         for (Test t: msg.getTests()) {
-            ActorRef executorActor = system.actorOf(Props.create(ExecutorActor.class), t.getTestName());
-            Future<Object> future = Patterns.ask(executorActor, new ExecuteTest(t, msg.getJsScript(), msg.getFunctionName()), timeout);
+            Future<Object> future = Patterns.ask(executorActors, new ExecuteTest(t, msg.getJsScript(), msg.getFunctionName()), timeout);
         }
         return "OK";
     }

@@ -6,4 +6,7 @@ Compile and start:
 mvn compile
 mvn exec:java -Dexec.mainClass="laba4.JsScriptTester"
 ```
+Example:
+```
 
+```

@@ -6,6 +6,7 @@ import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.japi.pf.ReceiveBuilder;
 import akka.pattern.Patterns;
+import akka.routing.BalancingPool;
 import akka.util.Timeout;
 import scala.concurrent.Future;
 
@@ -45,6 +46,8 @@ public class StorageActor extends AbstractActor {
 
     private String executeTests(ExecuteMessage msg) {
         ActorSystem system = ActorSystem.create("ExecuteTesting");
+        ActorRef testAggregatorActor = system.actorOf(new BalancingPool(5).props(
+                Props.create(TesterActor.class)), "testAggregator");
         for (Test t: msg.getTests()) {
             ActorRef executorActor = system.actorOf(Props.create(ExecutorActor.class), t.getTestName());
             Future<Object> future = Patterns.ask(executorActor, new ExecuteTest(t, msg.getJsScript(), msg.getFunctionName()), timeout);

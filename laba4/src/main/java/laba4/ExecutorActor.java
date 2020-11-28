@@ -10,7 +10,8 @@ public class ExecutorActor extends AbstractActor {
 
     private String executeTest(ExecuteTest t) {
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
-        engine.eval(t.);
+        t
+        engine.eval();
         Invocable invocable = (Invocable) engine;
         return invocable.invokeFunction(functionName, params).toString();
         return "";

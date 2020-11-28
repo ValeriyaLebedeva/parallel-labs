@@ -51,6 +51,7 @@ public class StorageActor extends AbstractActor {
         ActorRef executorActors = system.actorOf(new BalancingPool(5).props(
                 Props.create(ExecutorActor.class)), "testAggregator");
         try {
+            System.out.println(msg.getTests().size());
             for (Test t: msg.getTests()) {
                 Future<Object> future = Patterns.ask(executorActors, new ExecuteTest(t, msg.getJsScript(), msg.getFunctionName()), timeout);
                 String result;

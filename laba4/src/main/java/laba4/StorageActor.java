@@ -32,8 +32,8 @@ public class StorageActor extends AbstractActor {
             if (result.equals(expectedResult)) {
                 this.responseMsg = "OK";
             } else {
-                this.responseMsg = String.format("Expected: %s, but received: %s",
-                        expectedResult, result);
+                this.responseMsg = String.format("%s: Expected: %s, but received: %s",
+                        testName, expectedResult, result);
             }
         }
 
@@ -50,18 +50,21 @@ public class StorageActor extends AbstractActor {
         ActorSystem system = ActorSystem.create("ExecuteTesting");
         ActorRef executorActors = system.actorOf(new BalancingPool(5).props(
                 Props.create(ExecutorActor.class)), "testAggregator");
+       ArrayList<Result> results = new ArrayList<>();
         try {
             System.out.println(msg.getTests().size());
             for (Test t: msg.getTests()) {
                 Future<Object> future = Patterns.ask(executorActors, new ExecuteTest(t, msg.getJsScript(), msg.getFunctionName()), timeout);
-                String result;
-                result = (String) Await.result(future, timeout.duration());
-                System.out.println(result);
+                Result result;
+                result = new Result(t.getTestName(), (String) Await.result(future, timeout.duration()), t.getExpectedResult());
+                System.out.printf("Executed test %s, result: %s%n", t.getTestName(), result);
+                results.add(result);
             }
         } catch (Exception e) {
             return e.toString();
         }
-        return "OK";
+        storage.put(msg.getPackageId(), results);
+        return "Executed";
     }
 
 

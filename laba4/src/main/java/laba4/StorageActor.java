@@ -55,6 +55,7 @@ public class StorageActor extends AbstractActor {
             System.out.println(msg.getTests().size());
             for (Test t: msg.getTests()) {
                 Future<Object> future = Patterns.ask(executorActors, new ExecuteTest(t, msg.getJsScript(), msg.getFunctionName()), timeout);
+                
                 Result result;
                 result = new Result(t.getTestName(), (String) Await.result(future, timeout.duration()), t.getExpectedResult());
                 System.out.printf("Executed test %s, result: %s%n", t.getTestName(), result.responseMsg);

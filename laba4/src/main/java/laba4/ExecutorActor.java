@@ -6,7 +6,7 @@ import akka.japi.pf.ReceiveBuilder;
 public class ExecutorActor extends AbstractActor {
 
     private String executeTest(Test t) {
-        
+
         return "";
     }
 

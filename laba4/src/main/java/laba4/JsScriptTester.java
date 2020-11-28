@@ -17,14 +17,14 @@ import java.util.concurrent.CompletionStage;
 
 public class JsScriptTester {
     final static String ADDRESS = "localhost";
-    final static int PORT = 8080;
+    final static int PORT = 8082;
 
     public static void main(String[] args) throws Exception {
         ActorSystem system = ActorSystem.create("JsScriptTesting");
         ActorRef storageActor = system.actorOf(Props.create(StorageActor.class), "store");
         final Http http = Http.get(system);
         final ActorMaterializer materializer = ActorMaterializer.create(system);
-        Route router = new JsTestsRouters(system, storageActor).getRouters();
+        Route router = new Router(system, storageActor).getRouters();
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = router.flow(system, materializer);
         final CompletionStage<ServerBinding> binding = http.bindAndHandle(
                 routeFlow, ConnectHttp.toHost(ADDRESS, PORT), materializer

@@ -24,14 +24,14 @@ import org.slf4j.LoggerFactory;
  * Routes can be defined in separated classes like shown in here
  */
 //#user-routes-class
-public class JsTestsRouters {
+public class Router {
     //#user-routes-class
     private final ActorRef storageActor;
     private final static Timeout timeout = Timeout.create(Duration.ofSeconds(5));
     ActorSystem system;
 
 
-    public JsTestsRouters(ActorSystem system, ActorRef storageActor) {
+    public Router(ActorSystem system, ActorRef storageActor) {
         this.storageActor = storageActor;
         this.system = system;
     }

@@ -52,6 +52,7 @@ public class Router {
                                                         result = (String) Await.result(future, timeout.duration());
                                                     } catch (Exception e) {
                                                         return complete(e.toString());
+                                                    }
                                                     return complete(result);
                                                 }
 

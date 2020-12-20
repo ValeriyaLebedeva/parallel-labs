@@ -2,9 +2,9 @@ package laba5;
 
 public class MessageTest {
     private final float time;
-    private final float url;
+    private final String url;
 
-    public MessageTest(float time, float url) {
+    public MessageTest(float time, String url) {
         this.time = time;
         this.url = url;
     }
@@ -13,7 +13,7 @@ public class MessageTest {
         return time;
     }
 
-    public float getUrl() {
+    public String getUrl() {
         return url;
     }
 }

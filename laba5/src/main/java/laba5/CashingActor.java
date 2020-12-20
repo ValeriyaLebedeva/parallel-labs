@@ -1,4 +1,16 @@
 package laba5;
 
-public class CashingActor {
+import akka.actor.AbstractActor;
+
+
+
+public class CashingActor extends AbstractActor {
+
+    @Override
+    public Receive createReceive() {
+        return null;
+    }
+
+    public Receive
+
 }

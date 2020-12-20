@@ -1,2 +1,4 @@
-package laba4;public class jj {
+package laba4;
+
+public class jj {
 }

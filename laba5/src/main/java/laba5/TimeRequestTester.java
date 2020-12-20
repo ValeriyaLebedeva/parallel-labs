@@ -53,7 +53,7 @@ public class TimeRequestTester {
                 })
                 .mapAsync(1, (Pair<String, Integer> pair) -> {
                     CompletionStage<Object> stage = Patterns.ask(actorCashing, new MessageGetResult(pair.getKey()), TIMEOUT);
-                    return stage.thenCompose((Object re))
+                    return stage.thenCompose((Object time))
                 })
     }
 

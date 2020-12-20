@@ -18,8 +18,13 @@ import java.time.Duration;
 import javafx.util.Pair;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.regex.Pattern;
+
+import static org.asynchttpclient.Dsl.asyncHttpClient;
 
 public class TimeRequestTester {
     private static  final Duration TIMEOUT = Duration.ofSeconds(2);
@@ -53,7 +58,21 @@ public class TimeRequestTester {
                 })
                 .mapAsync(1, (Pair<String, Integer> pair) -> {
                     CompletionStage<Object> stage = Patterns.ask(actorCashing, new MessageGetResult(pair.getKey()), TIMEOUT);
-                    return stage.thenCompose((Object time))
+                    return stage.thenCompose((Object time) -> {
+                        if ((float)time >= 0) {
+                            return CompletableFuture.completedFuture(new Pair<>(pair.getKey(), (float)time));
+                        }
+                        Flow<Pair<String, Integer>, Float, NotUsed> flow =
+                                Flow.<Pair<String, Integer>>create()
+                                .mapConcat(p -> {
+                                    return new ArrayList<>(Collections.nCopies(p.getValue(), p.getKey())));
+                                })
+                                .mapAsync(pair.getValue(), (String url) -> {
+                                    float start = System.currentTimeMillis();
+                                    asyncHttpClient().prepareGet(url).execute();
+                                    float end = 
+                                })
+                    })
                 })
     }
 

@@ -9,7 +9,7 @@ public class CashingActor extends AbstractActor {
     @Override
     public Receive createReceive() {
         return ReceiveBuilder.create()
-                .match(Message.class, msg -> {
+                .match(MessageTest.class, msg -> {
 
                 })
     }

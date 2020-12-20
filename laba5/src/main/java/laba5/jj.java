@@ -1,4 +1,4 @@
-package laba4;
+package laba5;
 
 public class jj {
 }

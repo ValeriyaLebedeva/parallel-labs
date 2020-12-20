@@ -1,11 +1,11 @@
 package laba5;
 
 public class MessageGetResult {
-    private final String urlForTesting;
-    public MessageGetResult(String urlForTesting) {
-        this.urlForTesting = urlForTesting
+    private final String url;
+    public MessageGetResult(String url) {
+        this.url = url;
     }
     public String getUrlForTesting() {
-        return urlForTesting;
+        return url;
     }
 }

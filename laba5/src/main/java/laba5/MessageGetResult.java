@@ -5,7 +5,7 @@ public class MessageGetResult {
     public MessageGetResult(String url) {
         this.url = url;
     }
-    public String getUrlForTesting() {
+    public String getUrl() {
         return url;
     }
 }

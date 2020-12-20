@@ -1,16 +1,15 @@
 package laba5;
 
 import akka.actor.AbstractActor;
-
+import akka.japi.pf.ReceiveBuilder;
 
 
 public class CashingActor extends AbstractActor {
 
     @Override
     public Receive createReceive() {
-        return null;
+        return ReceiveBuilder.create()
+                .match()
     }
-
-    public Receive
 
 }

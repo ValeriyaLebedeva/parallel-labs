@@ -80,7 +80,7 @@ public class TimeRequestTester {
                                         });
                         return Source.single(pair)
                                 .via(flow)
-                                .toMat(Sink.fold((float) 0, Float::sum), Keep.right())
+                                .toMat(Sink.fold((float)0, Float::sum), Keep.right())
                                 .run(materializer)
                                 .thenApply(totalSum -> {
                                     return new Pair<>(pair.getKey(), totalSum / pair.getValue());

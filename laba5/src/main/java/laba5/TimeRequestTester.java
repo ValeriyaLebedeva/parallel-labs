@@ -60,7 +60,7 @@ public class TimeRequestTester {
                     System.out.println(count);
                     return new Pair<>(testUrl, count);
                 })
-                .mapAsync(2, (Pair<String, Integer> pair) -> {
+                .mapAsync(1, (Pair<String, Integer> pair) -> {
                     CompletionStage<Object> stage = Patterns.ask(actorCashing, new MessageGetResult(pair.getKey()), TIMEOUT);
                     return stage.thenCompose((Object time) -> {
                         if ((float) time >= 0) {

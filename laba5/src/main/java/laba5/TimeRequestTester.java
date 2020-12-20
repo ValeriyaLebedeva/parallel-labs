@@ -37,7 +37,11 @@ public class TimeRequestTester {
     }
 
     private static Flow<HttpRequest, HttpResponse, NotUsed> createFlow(ActorMaterializer materializer, ActorRef actorCashing) {
-        
+        return Flow.of(HttpRequest.class)
+                .map(r -> {
+
+                })
+                .mapAsync(1, (Pair<String, Integer> pair))
     }
 
 }

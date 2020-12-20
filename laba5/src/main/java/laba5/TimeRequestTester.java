@@ -72,15 +72,15 @@ public class TimeRequestTester {
                                             return new ArrayList<>(Collections.nCopies(p.getValue(), p.getKey()));
                                         })
                                         .mapAsync(pair.getValue(), (String url) -> {
-                                            float start = System.currentTimeMillis();
+                                            long start = System.currentTimeMillis();
                                             asyncHttpClient().prepareGet(url).execute();
-                                            float end = System.currentTimeMillis();
-                                            float finalTime = end - start;
+                                            long end = System.currentTimeMillis();
+                                            long finalTime = end - start;
                                             return CompletableFuture.completedFuture(finalTime);
                                         });
                         return Source.single(pair)
                                 .via(flow)
-                                .toMat(Sink.fold((float)0, Float::sum), Keep.right())
+                                .toMat(Sink.fold(0L, Long::sum), Keep.right())
                                 .run(materializer)
                                 .thenApply(totalSum -> {
                                     return new Pair<>(pair.getKey(), totalSum / pair.getValue());

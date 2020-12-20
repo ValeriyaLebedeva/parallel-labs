@@ -66,7 +66,7 @@ public class TimeRequestTester {
                         if ((float) time >= 0) {
                             return CompletableFuture.completedFuture(new Pair<>(pair.getKey(), (float) time));
                         }
-                        Flow<Pair<String, Integer>, Float, NotUsed> flow =
+                        Flow<Pair<String, Integer>, Long, NotUsed> flow =
                                 Flow.<Pair<String, Integer>>create()
                                         .mapConcat(p -> {
                                             return new ArrayList<>(Collections.nCopies(p.getValue(), p.getKey()));

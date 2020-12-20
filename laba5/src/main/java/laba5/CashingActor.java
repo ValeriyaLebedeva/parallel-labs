@@ -19,7 +19,9 @@ public class CashingActor extends AbstractActor {
                 .match(MessageTest.class, msg -> {
                     storage.put(msg.getUrl(), msg.getTime());
                 })
-                .matchAny()
+                .matchAny(k -> {
+                    System.out.println("Unknown request for cashingActor");
+                })
                 .build();
     }
 

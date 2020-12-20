@@ -55,11 +55,12 @@ public class TimeRequestTester {
         return Flow.of(HttpRequest.class)
                 .map(r -> {
                     Query q = r.getUri().query();
+                    String testUrl  = q.get("testUrl").get();
                     Integer count = Integer.parseInt(q.get("count").get());
                     System.out.println(count);
-                    return new Pair<>(q.get("testUrl").get(), count);
+                    return new Pair<>(testUrl, count);
                 })
-                .mapAsync(1, (Pair<String, Integer> pair) -> {
+                .mapAsync(2, (Pair<String, Integer> pair) -> {
                     CompletionStage<Object> stage = Patterns.ask(actorCashing, new MessageGetResult(pair.getKey()), TIMEOUT);
                     return stage.thenCompose((Object time) -> {
                         if ((float) time >= 0) {

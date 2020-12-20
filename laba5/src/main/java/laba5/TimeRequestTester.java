@@ -11,6 +11,7 @@ import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
+import javafx.util.Pair;
 
 import java.io.IOException;
 import java.util.concurrent.CompletionStage;
@@ -40,8 +41,11 @@ public class TimeRequestTester {
         return Flow.of(HttpRequest.class)
                 .map(r -> {
 
+                    return new Pair<>();
                 })
-                .mapAsync(1, (Pair<String, Integer> pair))
+                .mapAsync(1, (Pair<String, Integer> pair) -> {
+
+                })
     }
 
 }

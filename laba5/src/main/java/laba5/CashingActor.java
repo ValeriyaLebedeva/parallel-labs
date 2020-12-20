@@ -19,6 +19,7 @@ public class CashingActor extends AbstractActor {
                 .match(MessageTest.class, msg -> {
                     storage.put(msg.getUrl(), msg.getTime());
                 })
+                .matchAny()
                 .build();
     }
 

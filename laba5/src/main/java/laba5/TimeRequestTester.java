@@ -13,6 +13,9 @@ import akka.http.javadsl.model.Query;
 import akka.pattern.Patterns;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
+import akka.stream.javadsl.Keep;
+import akka.stream.javadsl.Sink;
+import akka.stream.javadsl.Source;
 import akka.util.Timeout;
 import java.time.Duration;
 import javafx.util.Pair;
@@ -59,21 +62,34 @@ public class TimeRequestTester {
                 .mapAsync(1, (Pair<String, Integer> pair) -> {
                     CompletionStage<Object> stage = Patterns.ask(actorCashing, new MessageGetResult(pair.getKey()), TIMEOUT);
                     return stage.thenCompose((Object time) -> {
-                        if ((float)time >= 0) {
-                            return CompletableFuture.completedFuture(new Pair<>(pair.getKey(), (float)time));
+                        if ((float) time >= 0) {
+                            return CompletableFuture.completedFuture(new Pair<>(pair.getKey(), (float) time));
                         }
                         Flow<Pair<String, Integer>, Float, NotUsed> flow =
                                 Flow.<Pair<String, Integer>>create()
-                                .mapConcat(p -> {
-                                    return new ArrayList<>(Collections.nCopies(p.getValue(), p.getKey())));
-                                })
-                                .mapAsync(pair.getValue(), (String url) -> {
-                                    float start = System.currentTimeMillis();
-                                    asyncHttpClient().prepareGet(url).execute();
-                                    float end = 
-                                })
-                    })
+                                        .mapConcat(p -> {
+                                            return new ArrayList<>(Collections.nCopies(p.getValue(), p.getKey()));
+                                        })
+                                        .mapAsync(pair.getValue(), (String url) -> {
+                                            float start = System.currentTimeMillis();
+                                            asyncHttpClient().prepareGet(url).execute();
+                                            float end = System.currentTimeMillis();
+                                            float finalTime = end - start;
+                                            return CompletableFuture.completedFuture(finalTime);
+                                        });
+                        return Source.single(pair)
+                                .via(flow)
+                                .toMat(Sink.fold((float) 0, Float::sum), Keep.right())
+                                .run(materializer)
+                                .thenApply(totalSum -> {
+                                    return new Pair<>(pair.getKey(), totalSum / pair.getValue());
+                                });
+                    });
                 })
+                .map((Pair<String, Float> pair) -> {
+                    actorCashing.tell(new MessageTest(pair.getValue(), pair.getKey()), ActorRef.noSender());
+                    return HttpResponse.create().withEntity(pair.getValue().toString() + "\n");
+                });
     }
 
 }

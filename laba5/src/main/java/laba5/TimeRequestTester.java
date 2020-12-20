@@ -55,9 +55,9 @@ public class TimeRequestTester {
         return Flow.of(HttpRequest.class)
                 .map(r -> {
                     Query q = r.getUri().query();
-                    Integer count = Integer.parseInt(q.get("count").get());
+                    Integer count = Integer.parseInt(q.getOrElse("count", "1"));
                     System.out.println(count);
-                    return new Pair<>(q.get("testUrl").get(), count);
+                    return new Pair<>(q.getOrElse("testUrl", "localhost"), count);
                 })
                 .mapAsync(1, (Pair<String, Integer> pair) -> {
                     CompletionStage<Object> stage = Patterns.ask(actorCashing, new MessageGetResult(pair.getKey()), TIMEOUT);

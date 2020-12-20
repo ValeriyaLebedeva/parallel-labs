@@ -1,2 +1,4 @@
-package laba5;public class TimeRequestTester {
+package laba5;
+
+public class TimeRequestTester {
 }

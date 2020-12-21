@@ -4,28 +4,32 @@ import akka.NotUsed;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
 import akka.http.javadsl.ConnectHttp;
 import akka.http.javadsl.Http;
 import akka.http.javadsl.ServerBinding;
+import akka.http.javadsl.model.HttpEntities;
 import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
 import akka.http.javadsl.model.Query;
+import akka.japi.Pair;
 import akka.pattern.Patterns;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
-import akka.stream.javadsl.Keep;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
-import akka.util.Timeout;
-import java.time.Duration;
-import javafx.util.Pair;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import java.util.regex.Pattern;
+
+import akka.stream.javadsl.Keep;
+import akka.stream.javadsl.Sink;
+import akka.stream.javadsl.Source;
+import org.asynchttpclient.AsyncHttpClient;
+import static org.asynchttpclient.Dsl.asyncHttpClient;
 
 import static org.asynchttpclient.Dsl.asyncHttpClient;
 
@@ -62,17 +66,17 @@ public class TimeRequestTester {
                     return new Pair<>(testUrl, count);
                 })
                 .mapAsync(1, (Pair<String, Integer> pair) -> {
-                    CompletionStage<Object> stage = Patterns.ask(actorCashing, new MessageGetResult(pair.getKey()), TIMEOUT);
+                    CompletionStage<Object> stage = Patterns.ask(actorCashing, new MessageGetResult(pair.first()), TIMEOUT);
                     return stage.thenCompose((Object time) -> {
                         if ((float) time >= 0) {
-                            return CompletableFuture.completedFuture(new Pair<>(pair.getKey(), (float)time));
+                            return CompletableFuture.completedFuture(new Pair<>(pair.first(), (float)time));
                         }
                         Flow<Pair<String, Integer>, Long, NotUsed> flow =
                                 Flow.<Pair<String, Integer>>create()
                                         .mapConcat(p -> {
-                                            return new ArrayList<>(Collections.nCopies(p.getValue(), p.getKey()));
+                                            return new ArrayList<>(Collections.nCopies(p.second(), p.first()));
                                         })
-                                        .mapAsync(pair.getValue(), (String url) -> {
+                                        .mapAsync(pair.second(), (String url) -> {
                                             long start = System.currentTimeMillis();
                                             asyncHttpClient().prepareGet(url).execute();
                                             long end = System.currentTimeMillis();
@@ -84,13 +88,13 @@ public class TimeRequestTester {
                                 .toMat(Sink.fold(0L, Long::sum), Keep.right())
                                 .run(materializer)
                                 .thenApply(totalSum -> {
-                                    return new Pair<>(pair.getKey(), (float)totalSum / pair.getValue());
+                                    return new Pair<>(pair.first(), (float)totalSum / pair.second());
                                 });
                     });
                 })
                 .map((r) -> {
-                    actorCashing.tell(new MessageTest(r.getValue(), r.getKey()), ActorRef.noSender());
-                    return HttpResponse.create().withEntity(r.getValue().toString() + "\n");
+                    actorCashing.tell(new MessageTest(r.second(), r.first()), ActorRef.noSender());
+                    return HttpResponse.create().withEntity(r.second().toString() + "\n");
                 });
     }
 

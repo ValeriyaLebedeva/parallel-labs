@@ -35,10 +35,12 @@ import static org.asynchttpclient.Dsl.asyncHttpClient;
 
 public class TimeRequestTester {
     private static  final Duration TIMEOUT = Duration.ofSeconds(2);
+    private static LoggingAdapter l;
 
     public static void main(String[] args) throws IOException {
         System.out.println("start!");
         ActorSystem system = ActorSystem.create("routes");
+        l = Logging.getLogger(system, System.out);
         final Http http = Http.get(system);
         ActorRef ActorCashing = system.actorOf(Props.create(CashingActor.class));
         final ActorMaterializer materializer = ActorMaterializer.create(system);
@@ -58,10 +60,9 @@ public class TimeRequestTester {
     private static Flow<HttpRequest, HttpResponse, NotUsed> createFlow(ActorMaterializer materializer, ActorRef actorCashing) {
         return Flow.of(HttpRequest.class)
                 .map((r) -> {
-                    System.out.println("HERE\n\n");
                     Query q = r.getUri().query();
-                    String testUrl  = q.get("testUrl").get();
-                    int count = Integer.parseInt(q.get("count").get());
+                    String testUrl  = q.getOrElse("testUrl", "localhost");
+                    int count = Integer.parseInt(q.getOrElse("count", "1"));
                     System.out.println(count);
                     return new Pair<>(testUrl, count);
                 })

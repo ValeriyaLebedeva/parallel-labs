@@ -53,7 +53,7 @@ public class TimeRequestTester {
 
     private static Flow<HttpRequest, HttpResponse, NotUsed> createFlow(ActorMaterializer materializer, ActorRef actorCashing) {
         return Flow.of(HttpRequest.class)
-                .map(r -> {
+                .map((r) -> {
                     Query q = r.getUri().query();
                     String testUrl  = q.get("testUrl").get();
                     Integer count = Integer.parseInt(q.get("count").get());
@@ -78,7 +78,7 @@ public class TimeRequestTester {
                                             long finalTime = end - start;
                                             return CompletableFuture.completedFuture(finalTime);
                                         });
-                        return Source.single(pair)
+                        return Source.from(Collections.singletonList(pair))
                                 .via(flow)
                                 .toMat(Sink.fold(0L, Long::sum), Keep.right())
                                 .run(materializer)
@@ -87,9 +87,9 @@ public class TimeRequestTester {
                                 });
                     });
                 })
-                .map((Pair<String, Float> pair) -> {
-                    actorCashing.tell(new MessageTest(pair.getValue(), pair.getKey()), ActorRef.noSender());
-                    return HttpResponse.create().withEntity(pair.getValue().toString() + "\n");
+                .map((r) -> {
+                    actorCashing.tell(new MessageTest(r.getValue(), r.getKey()), ActorRef.noSender());
+                    return HttpResponse.create().withEntity(r.getValue().toString() + "\n");
                 });
     }
 

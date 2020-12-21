@@ -19,3 +19,5 @@ curl -X GET localhost:8082/test/result/13
 ```
 Output:
 [{"responseMsg":"OK","testName":"test1"},{"responseMsg":"test2: Expected: 2.0, but received: 2.5","testName":"test2"}]
+
+## [Laba 5]

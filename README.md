@@ -32,6 +32,6 @@ mvn exec:java -Dexec.mainClass="laba5.TimeRequestTester"
 ```
 Example:
 ```
-curl 
+curl http://localhost:8080/?testUrl=http://rambler.ru&count=20
 ```
-Output: Executed
+Output: time, ms

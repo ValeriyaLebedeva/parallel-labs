@@ -56,7 +56,7 @@ public class TimeRequestTester {
                 .map((r) -> {
                     Query q = r.getUri().query();
                     String testUrl  = q.get("testUrl").get();
-                    Integer count = Integer.parseInt(q.get("count").get());
+                    int count = Integer.parseInt(q.get("count").get());
                     System.out.println(count);
                     return new Pair<>(testUrl, count);
                 })
@@ -64,7 +64,7 @@ public class TimeRequestTester {
                     CompletionStage<Object> stage = Patterns.ask(actorCashing, new MessageGetResult(pair.getKey()), TIMEOUT);
                     return stage.thenCompose((Object time) -> {
                         if ((float) time >= 0) {
-                            return CompletableFuture.completedFuture(new Pair<>(pair.getKey(), (float) time));
+                            return CompletableFuture.completedFuture(new Pair<>(pair.getKey(), (float)time));
                         }
                         Flow<Pair<String, Integer>, Long, NotUsed> flow =
                                 Flow.<Pair<String, Integer>>create()

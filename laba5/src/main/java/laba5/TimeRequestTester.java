@@ -54,6 +54,7 @@ public class TimeRequestTester {
     private static Flow<HttpRequest, HttpResponse, NotUsed> createFlow(ActorMaterializer materializer, ActorRef actorCashing) {
         return Flow.of(HttpRequest.class)
                 .map((r) -> {
+                    System.out.println("HERE\n\n");
                     Query q = r.getUri().query();
                     String testUrl  = q.get("testUrl").get();
                     int count = Integer.parseInt(q.get("count").get());

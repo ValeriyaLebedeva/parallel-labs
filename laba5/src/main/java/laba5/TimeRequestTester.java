@@ -83,7 +83,7 @@ public class TimeRequestTester {
                                 .toMat(Sink.fold(0L, Long::sum), Keep.right())
                                 .run(materializer)
                                 .thenApply(totalSum -> {
-                                    return new Pair<>(pair.getKey(), totalSum / pair.getValue());
+                                    return new Pair<>(pair.getKey(), (float)totalSum / pair.getValue());
                                 });
                     });
                 })

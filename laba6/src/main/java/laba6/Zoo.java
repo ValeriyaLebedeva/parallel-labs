@@ -12,11 +12,16 @@ import java.util.ArrayList;
 public class Zoo {
     public static final String ZOOKEEPER_ADDRESS = "localhost:2181";
     private static final int TIMEOUT = (int)Duration.ofSeconds(5).getSeconds();
-    public static ZooKeeper zooKeeper;
-    private static ActorRef storageActor;
+    public final ZooKeeper zooKeeper;
+    private final ActorRef storageActor;
+
     public Zoo(ActorRef storage) throws IOException {
-        zooKeeper = new ZooKeeper(ZOOKEEPER_ADDRESS, TIMEOUT, watcher);
-        storageActor = storageActor;
+        this.zooKeeper = new ZooKeeper(ZOOKEEPER_ADDRESS, TIMEOUT, watcher);
+        this.storageActor = storage;
+    }
+
+    public ActorRef getStorageActor() {
+        return storageActor;
     }
 
     public static Watcher watcher = watchedEvent -> {

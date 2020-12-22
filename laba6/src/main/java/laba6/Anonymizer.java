@@ -14,6 +14,7 @@ import akka.pattern.Patterns;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.concurrent.CompletionStage;
 import static akka.http.javadsl.server.Directives.*;
 
@@ -22,14 +23,17 @@ public class Anonymizer {
     private static final String HOST = "localhost";
     private static final String QUERY_URL = "url";
     private static final String QUERY_COUNT = "count";
+    private static final Duration TIMEOUT = Duration.ofSeconds(5);
     public static int PORT;
     public static Http http;
+    private static ActorRef storageActor;
+
     public static void main(String[] argv) throws IOException {
         ActorSystem actorSystem = ActorSystem.create("routes");
         http = Http.get(actorSystem);
-        ActorRef storage = actorSystem.actorOf(Props.create(StorageActor.class));
+        storageActor = actorSystem.actorOf(Props.create(StorageActor.class));
         PORT = Integer.parseInt(argv[0]);
-        Zoo zoo = new Zoo(storage);
+        Zoo zoo = new Zoo(storageActor);
         final ActorMaterializer materializer = ActorMaterializer.create(actorSystem);
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =
                 createRoute().flow(actorSystem, materializer);
@@ -51,7 +55,16 @@ public class Anonymizer {
                         parameter(QUERY_COUNT, c -> {
                             int count = Integer.parseInt(c);
                             if (count <= 0) {
-                                return completeWithFuture(Patterns.ask(storageActor, ))
+                                return completeWithFuture(Patterns.ask(storageActor, new GetServerMsg(), TIMEOUT)
+
+                                        .thenApply(nextPort -> (String)nextPort)
+                                        .thenCompose(nextPort ->
+                                                fetch(
+                                                        String.format(
+                                                                ""
+                                                        )
+                                                ))
+                                );
                             }
                         }))))
     }

@@ -12,12 +12,12 @@ import java.util.ArrayList;
 public class Zoo {
     public static final String ZOOKEEPER_ADDRESS = "localhost:2181";
     private static final int TIMEOUT = (int)Duration.ofSeconds(5).getSeconds();
-    public final ZooKeeper zooKeeper;
-    private final ActorRef storageActor;
+    public static ZooKeeper zooKeeper;
+    private static ActorRef storageActor;
 
     public Zoo(ActorRef storage) throws IOException {
-        this.zooKeeper = new ZooKeeper(ZOOKEEPER_ADDRESS, TIMEOUT, watcher);
-        this.storageActor = storage;
+        zooKeeper = new ZooKeeper(ZOOKEEPER_ADDRESS, TIMEOUT, watcher);
+        storageActor = storage;
     }
 
     public ActorRef getStorageActor() {
@@ -30,16 +30,14 @@ public class Zoo {
                 watchedEvent.getType() == Watcher.Event.EventType.NodeDeleted) {
             ArrayList<String> updatedServers = new ArrayList<>();
             try {
-                for (String c: this.zooKeeper.getChildren("/servers", null)) {
+                for (String c: zooKeeper.getChildren("/servers", null)) {
                     String port = new String(zooKeeper.getData("/servers/" + c, false, null));
                     updatedServers.add(port);
                 }
                 storageActor.tell(new RefreshServersMsg(updatedServers), ActorRef.noSender());
-            } catch (KeeperException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (KeeperException | InterruptedException e) {
                 e.printStackTrace();
             }
         }
-    }
+    };
 }

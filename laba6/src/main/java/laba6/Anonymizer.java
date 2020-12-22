@@ -55,18 +55,22 @@ public class Anonymizer {
                         parameter(QUERY_COUNT, c -> {
                             int count = Integer.parseInt(c);
                             if (count <= 0) {
-                                return completeWithFuture(Patterns.ask(storageActor, new GetServerMsg(), TIMEOUT)
-
-                                        .thenApply(nextPort -> (String)nextPort)
-                                        .thenCompose(nextPort ->
-                                                fetch(
-                                                        String.format(
-                                                                ""
-                                                        )
-                                                ))
-                                );
+                                return completeWithFuture(fetch(url));
                             }
-                        }))))
+                            return completeWithFuture(Patterns.ask(storageActor, new GetServerMsg(), TIMEOUT)
+
+                                    .thenApply(nextPort -> (String)nextPort)
+                                    .thenCompose(nextPort ->
+                                            fetch(
+                                                    String.format(
+                                                            "http://%s:%s?url=%s&count=%d",
+                                                            HOST, nextPort, url, count - 1)
+                                            )
+                                    )
+                            );
+                        })
+                ))
+        );
     }
 
     private static CompletionStage<HttpResponse> fetch(String url) {

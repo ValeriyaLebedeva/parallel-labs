@@ -13,7 +13,7 @@ public class StorageActor extends AbstractActor {
         return ReceiveBuilder
                 .create()
                 .match(GetServerMsg.class, msg -> {
-                    return;
+                    servers.getServers();
                 })
                 .match(RefreshServersMsg.class, msg -> {
                     return;

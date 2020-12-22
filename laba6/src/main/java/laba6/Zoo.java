@@ -26,7 +26,7 @@ public class Zoo {
                     String port = new String(zooKeeper.getData("/servers/" + c, false, null));
                     updatedServers.add(port);
                 }
-                Act
+                StorageActor.tell()
             } catch (KeeperException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {

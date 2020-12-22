@@ -1,4 +1,8 @@
 package laba6;
 
-public class StorageActor {
+import java.util.ArrayList;
+
+public class StorageActor extends AbstractActor {
+    ArrayList<String> servers = new ArrayList<>();
+
 }

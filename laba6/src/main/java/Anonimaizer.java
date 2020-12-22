@@ -1,2 +1,2 @@
-package PACKAGE_NAME;public class Anonimaizer {
+public class Anonimaizer {
 }

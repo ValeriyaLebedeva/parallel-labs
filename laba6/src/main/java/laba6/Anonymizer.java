@@ -28,7 +28,7 @@ public class Anonymizer {
     public static int PORT;
     public static Http http;
     private static ActorRef storageActor;
-    private static Random random = new Random();
+    private static final Random random = new Random();
 
     public static void main(String[] argv) throws IOException {
         ActorSystem actorSystem = ActorSystem.create("routes");
@@ -38,7 +38,7 @@ public class Anonymizer {
             PORT = Integer.parseInt(argv[0]);
         }
         else {
-            PORT = random.nextInt(2000, 4000);
+            PORT = 2000 + random.nextInt(4000);
         }
 
         Zoo zoo = new Zoo(storageActor);

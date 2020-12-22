@@ -14,9 +14,9 @@ public class Zoo {
     private static final int TIMEOUT = (int)Duration.ofSeconds(5).getSeconds();
     public static ZooKeeper zooKeeper;
     private static ActorRef storageActor;
-    public Zoo(ActorRef storageActor) throws IOException {
+    public Zoo(ActorRef storage) throws IOException {
         zooKeeper = new ZooKeeper(ZOOKEEPER_ADDRESS, TIMEOUT, watcher);
-        Zoo.storageActor = storageActor;
+        storageActor = storageActor;
     }
 
     public static Watcher watcher = watchedEvent -> {

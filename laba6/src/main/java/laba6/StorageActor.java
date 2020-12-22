@@ -1,6 +1,7 @@
 package laba6;
 
 import akka.actor.AbstractActor;
+import akka.actor.ActorRef;
 import akka.japi.pf.ReceiveBuilder;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class StorageActor extends AbstractActor {
                     servers.getServers();
                 })
                 .match(RefreshServersMsg.class, msg -> {
-                    return;
+                    getSender().tell(servers.get(rand.nextInt(servers.size())), ActorRef.noSender());
                 })
                 .build();
     }

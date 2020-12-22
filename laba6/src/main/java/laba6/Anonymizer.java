@@ -8,7 +8,7 @@ import akka.http.javadsl.model.HttpRequest;
 
 import java.io.IOException;
 
-public class Aninymizer {
+public class Anonymizer {
     public static int PORT;
     public static void main(String[] argv) throws IOException {
         ActorSystem actorSystem = ActorSystem.create("routes");

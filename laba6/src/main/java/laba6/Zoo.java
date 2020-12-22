@@ -30,7 +30,7 @@ public class Zoo {
                 watchedEvent.getType() == Watcher.Event.EventType.NodeDeleted) {
             ArrayList<String> updatedServers = new ArrayList<>();
             try {
-                for (String c: zooKeeper.getChildren("/servers", null)) {
+                for (String c: this.zooKeeper.getChildren("/servers", null)) {
                     String port = new String(zooKeeper.getData("/servers/" + c, false, null));
                     updatedServers.add(port);
                 }

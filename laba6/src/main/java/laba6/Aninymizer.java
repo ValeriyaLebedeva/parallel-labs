@@ -1,17 +1,20 @@
 package laba6;
 
+import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.http.javadsl.Http;
 import akka.http.javadsl.model.HttpRequest;
 
-public class Anonimaizer {
+import java.io.IOException;
+
+public class Aninymizer {
     public static int PORT;
-    public static void main(String[] argv) {
+    public static void main(String[] argv) throws IOException {
         ActorSystem actorSystem = ActorSystem.create("routes");
         Http http = Http.get(actorSystem);
-        actorSystem.actorOf(Props.create(StorageActor.class));
+        ActorRef storage = actorSystem.actorOf(Props.create(StorageActor.class));
         PORT = Integer.parseInt(argv[0]);
-        createZooKeeper();
+        Zoo zoo = new Zoo(storage);
     }
 }

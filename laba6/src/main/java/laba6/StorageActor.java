@@ -16,10 +16,10 @@ public class StorageActor extends AbstractActor {
         return ReceiveBuilder
                 .create()
                 .match(GetServerMsg.class, msg -> {
-                    servers.getServers();
+                    getSender().tell(servers.get(random.nextInt(servers.size())), ActorRef.noSender());
                 })
                 .match(RefreshServersMsg.class, msg -> {
-                    getSender().tell(servers.get(random.nextInt(servers.size())), ActorRef.noSender());
+                    servers = msg.getServers();
                 })
                 .build();
     }

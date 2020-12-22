@@ -12,4 +12,5 @@ public class RefreshServersMsg {
     public ArrayList<String> getServers() {
         return servers;
     }
+
 }

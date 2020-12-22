@@ -12,5 +12,6 @@ public class Anonimaizer {
         Http http = Http.get(actorSystem);
         actorSystem.actorOf(Props.create(StorageActor.class));
         PORT = Integer.parseInt(argv[0]);
+        createZooKeeper();
     }
 }

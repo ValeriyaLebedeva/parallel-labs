@@ -21,6 +21,7 @@ import static akka.http.javadsl.server.Directives.*;
 public class Anonymizer {
     private static final String HOST = "localhost";
     private static final String QUERY_URL = "url";
+    private static final String QUERY_COUNT = "count";
     public static int PORT;
     public static Http http;
     public static void main(String[] argv) throws IOException {
@@ -46,7 +47,13 @@ public class Anonymizer {
 
     private static Route createRoute() {
         return route(get(() ->
-                parameter(QUERY_URL)))
+                parameter(QUERY_URL, url ->
+                        parameter(QUERY_COUNT, c -> {
+                            int count = Integer.parseInt(c);
+                            if (count <= 0) {
+                                return completeWithFuture(Patterns.ask(storageActor, ))
+                            }
+                        }))))
     }
 
     private static CompletionStage<HttpResponse> fetch(String url) {

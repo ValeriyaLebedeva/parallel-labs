@@ -42,6 +42,7 @@ public class Anonymizer {
         }
         System.out.printf("Port: %d\n", PORT);
         Zoo zoo = new Zoo(storageActor);
+        zoo.init(String.valueOf(PORT);
         final ActorMaterializer materializer = ActorMaterializer.create(actorSystem);
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =
                 createRoute().flow(actorSystem, materializer);

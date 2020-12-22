@@ -1,9 +1,7 @@
 package laba6;
 
 import akka.actor.ActorRef;
-import org.apache.zookeeper.KeeperException;
-import org.apache.zookeeper.Watcher;
-import org.apache.zookeeper.ZooKeeper;
+import org.apache.zookeeper.*;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -21,14 +19,12 @@ public class Zoo {
         storageActor = storage;
     }
 
-    public ActorRef getStorageActor() {
-        return storageActor;
-    }
-
-    public static void init(String port) {
+    public void init(String port) throws KeeperException, InterruptedException {
         zooKeeper.create("/servers/" + port, (port+"").getBytes(),
-                
-                )
+                ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);
+        WatchedEvent e = new WatchedEvent(Watcher.Event.EventType.NodeCreated,
+                Watcher.Event.KeeperState.SyncConnected, "");
+        watcher.process(e);
     }
 
     public static Watcher watcher = watchedEvent -> {
@@ -47,4 +43,5 @@ public class Zoo {
             }
         }
     };
+
 }

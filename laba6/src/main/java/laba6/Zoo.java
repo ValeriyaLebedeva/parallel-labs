@@ -13,10 +13,10 @@ public class Zoo {
     public static final String ZOOKEEPER_ADDRESS = "localhost:2181";
     private static final int TIMEOUT = (int)Duration.ofSeconds(5).getSeconds();
     public static ZooKeeper zooKeeper;
-    private ActorRef storageActor;
+    private static ActorRef storageActor;
     public Zoo(ActorRef storageActor) throws IOException {
         zooKeeper = new ZooKeeper(ZOOKEEPER_ADDRESS, TIMEOUT, watcher);
-        this.storageActor = storageActor;
+        Zoo.storageActor = storageActor;
     }
 
     public static Watcher watcher = watchedEvent -> {
@@ -29,7 +29,7 @@ public class Zoo {
                     String port = new String(zooKeeper.getData("/servers/" + c, false, null));
                     updatedServers.add(port);
                 }
-                
+                storageActor.tell(new RefreshServersMsg(updatedServers), ActorRef.noSender());
             } catch (KeeperException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {

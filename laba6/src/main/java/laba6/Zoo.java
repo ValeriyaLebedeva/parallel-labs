@@ -6,6 +6,7 @@ import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooKeeper;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayList;
 
@@ -22,6 +23,12 @@ public class Zoo {
 
     public ActorRef getStorageActor() {
         return storageActor;
+    }
+
+    public static void init(String port) {
+        zooKeeper.create("/servers/" + port, (port+"").getBytes(),
+                
+                )
     }
 
     public static Watcher watcher = watchedEvent -> {

@@ -41,7 +41,7 @@ public class Anonymizer {
             PORT = 2000 + random.nextInt(4000);
         }
         System.out.printf("Port: %d\n", PORT);
-        new Zoo(storageActor);
+        Zoo zoo = new Zoo(storageActor);
         final ActorMaterializer materializer = ActorMaterializer.create(actorSystem);
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =
                 createRoute().flow(actorSystem, materializer);

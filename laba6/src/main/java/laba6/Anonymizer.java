@@ -5,6 +5,7 @@ import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.http.javadsl.Http;
 import akka.http.javadsl.model.HttpRequest;
+import akka.stream.ActorMaterializer;
 
 import java.io.IOException;
 
@@ -16,5 +17,7 @@ public class Anonymizer {
         ActorRef storage = actorSystem.actorOf(Props.create(StorageActor.class));
         PORT = Integer.parseInt(argv[0]);
         Zoo zoo = new Zoo(storage);
+        final ActorMaterializer materializer = ActorMaterializer.create(actorSystem);
+        
     }
 }

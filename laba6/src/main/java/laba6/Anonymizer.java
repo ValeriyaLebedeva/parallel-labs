@@ -15,6 +15,7 @@ import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.Random;
 import java.util.concurrent.CompletionStage;
 import static akka.http.javadsl.server.Directives.*;
 
@@ -27,12 +28,19 @@ public class Anonymizer {
     public static int PORT;
     public static Http http;
     private static ActorRef storageActor;
+    private static Random random = new Random();
 
     public static void main(String[] argv) throws IOException {
         ActorSystem actorSystem = ActorSystem.create("routes");
         http = Http.get(actorSystem);
         storageActor = actorSystem.actorOf(Props.create(StorageActor.class));
-        PORT = Integer.parseInt(argv[0]);
+        if (argv.length > 0) {
+            PORT = Integer.parseInt(argv[0]);
+        }
+        else {
+            PORT = random.nextInt(2000, 4000);
+        }
+
         Zoo zoo = new Zoo(storageActor);
         final ActorMaterializer materializer = ActorMaterializer.create(actorSystem);
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =

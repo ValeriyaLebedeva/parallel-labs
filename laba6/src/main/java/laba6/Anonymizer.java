@@ -15,13 +15,12 @@ import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
 import java.io.IOException;
 import java.util.concurrent.CompletionStage;
+import static akka.http.javadsl.server.Directives.*;
 
-import static akka.http.javadsl.server.Directives.parameter;
-import static akka.http.javadsl.server.Directives.route;
 
 public class Anonymizer {
     private static final String HOST = "localhost";
-    private static final String URL = "url";
+    private static final String QUERY_URL = "url";
     public static int PORT;
     public static Http http;
     public static void main(String[] argv) throws IOException {
@@ -46,7 +45,8 @@ public class Anonymizer {
     }
 
     private static Route createRoute() {
-        return route(
+        return route(get(() ->
+                parameter(QUERY_URL)))
     }
 
     private static CompletionStage<HttpResponse> fetch(String url) {

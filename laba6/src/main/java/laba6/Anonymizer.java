@@ -16,6 +16,7 @@ import akka.stream.javadsl.Flow;
 import java.io.IOException;
 import java.util.concurrent.CompletionStage;
 
+import static akka.http.javadsl.server.Directives.parameter;
 import static akka.http.javadsl.server.Directives.route;
 
 public class Anonymizer {
@@ -45,7 +46,7 @@ public class Anonymizer {
     }
 
     private static Route createRoute() {
-        return route(parameter(URL, url ->))
+        return route(
     }
 
     private static CompletionStage<HttpResponse> fetch(String url) {

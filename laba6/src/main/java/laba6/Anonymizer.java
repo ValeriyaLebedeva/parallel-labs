@@ -16,12 +16,16 @@ import akka.stream.javadsl.Flow;
 import java.io.IOException;
 import java.util.concurrent.CompletionStage;
 
+import static akka.http.javadsl.server.Directives.route;
+
 public class Anonymizer {
     private static final String HOST = "localhost";
+    private static final String URL = "url";
     public static int PORT;
+    public static Http http;
     public static void main(String[] argv) throws IOException {
         ActorSystem actorSystem = ActorSystem.create("routes");
-        Http http = Http.get(actorSystem);
+        http = Http.get(actorSystem);
         ActorRef storage = actorSystem.actorOf(Props.create(StorageActor.class));
         PORT = Integer.parseInt(argv[0]);
         Zoo zoo = new Zoo(storage);
@@ -40,9 +44,11 @@ public class Anonymizer {
                 });
     }
 
-    
-
     private static Route createRoute() {
-        return;
+        return route(parameter(URL, url ->))
+    }
+
+    private static CompletionStage<HttpResponse> fetch(String url) {
+        return http.singleRequest(HttpRequest.create(url));
     }
 }

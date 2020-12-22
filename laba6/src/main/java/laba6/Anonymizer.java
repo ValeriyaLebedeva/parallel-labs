@@ -13,6 +13,8 @@ import akka.http.javadsl.server.Route;
 import akka.pattern.Patterns;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
+import org.apache.zookeeper.KeeperException;
+
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Random;
@@ -30,7 +32,7 @@ public class Anonymizer {
     private static ActorRef storageActor;
     private static final Random random = new Random();
 
-    public static void main(String[] argv) throws IOException {
+    public static void main(String[] argv) throws IOException, KeeperException, InterruptedException {
         ActorSystem actorSystem = ActorSystem.create("routes");
         http = Http.get(actorSystem);
         storageActor = actorSystem.actorOf(Props.create(StorageActor.class));
@@ -42,7 +44,7 @@ public class Anonymizer {
         }
         System.out.printf("Port: %d\n", PORT);
         Zoo zoo = new Zoo(storageActor);
-        zoo.init(String.valueOf(PORT);
+        zoo.init(String.valueOf(PORT));
         final ActorMaterializer materializer = ActorMaterializer.create(actorSystem);
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =
                 createRoute().flow(actorSystem, materializer);

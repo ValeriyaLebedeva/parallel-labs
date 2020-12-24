@@ -17,6 +17,9 @@ import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.zookeeper.KeeperException;
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
+import org.apache.zookeeper.ZooKeeper;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -51,7 +54,13 @@ public class Anonymizer {
             port = 2000 + random.nextInt(4000);
         }
         System.out.printf("Port %d was chosen randomly\n", port);
-        Zoo zoo = new Zoo(storageActor, ZOOKEEPER_ADDRESS);
+        Watcher empty = new Watcher() {
+            @Override
+            public void process(WatchedEvent watchedEvent) {
+            }
+        };
+        zooKeeper = new ZooKeeper(address, TIMEOUT, empty);
+        storageActor = storage;
         zoo.init(String.valueOf(port));
         System.out.printf("Connected to zookeeper on : %s\n", ZOOKEEPER_ADDRESS);
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =

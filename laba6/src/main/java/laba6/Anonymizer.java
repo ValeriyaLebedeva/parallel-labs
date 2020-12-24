@@ -27,7 +27,7 @@ public class Anonymizer {
     private static final String QUERY_URL = "url";
     private static final String QUERY_COUNT = "count";
     private static final Duration TIMEOUT = Duration.ofSeconds(5);
-    public static int PORT;
+    public static int port;
     public static Http http;
     private static ActorRef storageActor;
     private static final Random random = new Random();
@@ -37,20 +37,20 @@ public class Anonymizer {
         http = Http.get(actorSystem);
         storageActor = actorSystem.actorOf(Props.create(StorageActor.class));
         if (argv.length > 0) {
-            PORT = Integer.parseInt(argv[0]);
+            port = Integer.parseInt(argv[0]);
         }
         else {
-            PORT = 2000 + random.nextInt(4000);
+            port = 2000 + random.nextInt(4000);
         }
-        System.out.printf("Port: %d\n", PORT);
+        System.out.printf("Port: %d\n", port);
         Zoo zoo = new Zoo(storageActor);
-        zoo.init(String.valueOf(PORT));
+        zoo.init(String.valueOf(port));
         final ActorMaterializer materializer = ActorMaterializer.create(actorSystem);
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =
                 createRoute().flow(actorSystem, materializer);
         final CompletionStage<ServerBinding> binding = http.bindAndHandle(
                 routeFlow,
-                ConnectHttp.toHost(HOST, PORT),
+                ConnectHttp.toHost(HOST, port),
                 materializer
         );
         binding
@@ -66,6 +66,7 @@ public class Anonymizer {
                         parameter(QUERY_COUNT, c -> {
                             int count = Integer.parseInt(c);
                             if (count <= 0) {
+                                System.out.printf("Real Port was: %d", port);
                                 return completeWithFuture(fetch(url));
                             }
                             return completeWithFuture(Patterns.ask(storageActor, new GetServerMsg(), TIMEOUT)

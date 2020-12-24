@@ -9,13 +9,12 @@ import java.time.Duration;
 import java.util.ArrayList;
 
 public class Zoo {
-    public static final String ZOOKEEPER_ADDRESS = "localhost:2181";
     private static final int TIMEOUT = (int)Duration.ofSeconds(5).getSeconds();
     public static ZooKeeper zooKeeper;
     private static ActorRef storageActor;
 
-    public Zoo(ActorRef storage) throws IOException {
-        zooKeeper = new ZooKeeper(ZOOKEEPER_ADDRESS, TIMEOUT, watcher);
+    public Zoo(ActorRef storage, String address) throws IOException {
+        zooKeeper = new ZooKeeper(address, TIMEOUT, watcher);
         storageActor = storage;
     }
 

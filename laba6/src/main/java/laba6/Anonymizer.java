@@ -31,6 +31,7 @@ public class Anonymizer {
     public static Http http;
     private static ActorRef storageActor;
     private static final Random random = new Random();
+    public static final String ZOOKEEPER_ADDRESS = "localhost:2181";
 
     public static void main(String[] argv) throws IOException, KeeperException, InterruptedException {
         ActorSystem actorSystem = ActorSystem.create("routes");
@@ -43,9 +44,9 @@ public class Anonymizer {
             port = 2000 + random.nextInt(4000);
         }
         System.out.printf("Port: %d\n", port);
-        Zoo zoo = new Zoo(storageActor);
+        Zoo zoo = new Zoo(storageActor, ZOOKEEPER_ADDRESS);
         zoo.init(String.valueOf(port));
-        System.out.printf("Connected to ")
+        System.out.printf("Connected to zookeeper on the: %s", ZOOKEEPER_ADDRESS);
         final ActorMaterializer materializer = ActorMaterializer.create(actorSystem);
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =
                 createRoute().flow(actorSystem, materializer);

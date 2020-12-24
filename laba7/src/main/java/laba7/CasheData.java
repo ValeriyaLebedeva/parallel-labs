@@ -1,2 +1,4 @@
-package laba7;public class CasheData {
+package laba7;
+
+public class CasheData {
 }

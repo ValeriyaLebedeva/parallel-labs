@@ -33,7 +33,7 @@ public class Anonymizer {
     public static Http http;
     private static ActorRef storageActor;
     private static final Random random = new Random();
-    public static final String ZOOKEEPER_ADDRESS = "localhost:2181";
+    public static final String ZOOKEEPER_ADDRESS = "127.0.0.1:2181";
     private static LoggingAdapter logger;
 
     public static void main(String[] argv) throws IOException, KeeperException, InterruptedException {

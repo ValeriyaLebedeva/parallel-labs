@@ -18,12 +18,12 @@ public class Zoo implements Watcher {
     public Zoo(ZooKeeper zoo, ActorRef storage) throws IOException, KeeperException, InterruptedException {
         this.zooKeeper = zoo;
         this.storageActor = storage;
-        ArrayList<String> updatedServers = new ArrayList<>();
-        for (String c: zooKeeper.getChildren("/servers", null)) {
-            String port = new String(zooKeeper.getData("/servers/" + c, false, null));
-            updatedServers.add(port);
-        }
-        storageActor.tell(new RefreshServersMsg(updatedServers), ActorRef.noSender());
+//        ArrayList<String> updatedServers = new ArrayList<>();
+//        for (String c: zooKeeper.getChildren("/servers", null)) {
+//            String port = new String(zooKeeper.getData("/servers/" + c, false, null));
+//            updatedServers.add(port);
+//        }
+//        storageActor.tell(new RefreshServersMsg(updatedServers), ActorRef.noSender());
     }
 
     public void init(String port) throws KeeperException, InterruptedException {

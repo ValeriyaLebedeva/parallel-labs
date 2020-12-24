@@ -6,6 +6,7 @@ import akka.event.LoggingAdapter;
 import org.apache.zookeeper.*;
 
 import java.io.IOException;
+import java.nio.file.WatchEvent;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayList;

@@ -41,6 +41,7 @@ public class Anonymizer {
         http = Http.get(actorSystem);
         logger = Logging.getLogger(actorSystem, System.out);
         storageActor = actorSystem.actorOf(Props.create(StorageActor.class));
+        final ActorMaterializer materializer = ActorMaterializer.create(actorSystem);
         if (argv.length > 0) {
             port = Integer.parseInt(argv[0]);
         }
@@ -51,7 +52,6 @@ public class Anonymizer {
         Zoo zoo = new Zoo(storageActor, ZOOKEEPER_ADDRESS);
         zoo.init(String.valueOf(port));
         System.out.printf("Connected to zookeeper on : %s\n", ZOOKEEPER_ADDRESS);
-        final ActorMaterializer materializer = ActorMaterializer.create(actorSystem);
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =
                 createRoute().flow(actorSystem, materializer);
         final CompletionStage<ServerBinding> binding = http.bindAndHandle(

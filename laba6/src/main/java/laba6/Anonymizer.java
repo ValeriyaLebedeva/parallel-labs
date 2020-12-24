@@ -15,6 +15,7 @@ import akka.http.javadsl.server.Route;
 import akka.pattern.Patterns;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.zookeeper.KeeperException;
 
 import java.io.IOException;
@@ -37,6 +38,7 @@ public class Anonymizer {
     private static LoggingAdapter logger;
 
     public static void main(String[] argv) throws IOException, KeeperException, InterruptedException {
+        BasicConfigurator.configure();
         ActorSystem actorSystem = ActorSystem.create("routes");
         http = Http.get(actorSystem);
         logger = Logging.getLogger(actorSystem, System.out);

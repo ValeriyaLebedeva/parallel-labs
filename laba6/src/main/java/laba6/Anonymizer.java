@@ -45,6 +45,7 @@ public class Anonymizer {
         System.out.printf("Port: %d\n", port);
         Zoo zoo = new Zoo(storageActor);
         zoo.init(String.valueOf(port));
+        System.out.printf("Connected to ")
         final ActorMaterializer materializer = ActorMaterializer.create(actorSystem);
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =
                 createRoute().flow(actorSystem, materializer);
@@ -69,6 +70,7 @@ public class Anonymizer {
                                 System.out.printf("Real Port was: %d", port);
                                 return completeWithFuture(fetch(url));
                             }
+                            System.out.printf("Intermediate Port was: %d (%d)", port, count);
                             return completeWithFuture(Patterns.ask(storageActor, new GetServerMsg(), TIMEOUT)
 
                                     .thenApply(nextPort -> (String)nextPort)

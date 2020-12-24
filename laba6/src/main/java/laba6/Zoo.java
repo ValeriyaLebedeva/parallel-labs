@@ -47,6 +47,10 @@ public class Zoo implements Watcher {
 
     @Override
     public void process(WatchedEvent watchedEvent) {
-
+        try {
+            sendServers();
+        } catch (KeeperException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

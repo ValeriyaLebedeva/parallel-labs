@@ -16,9 +16,15 @@ public class Zoo implements Watcher {
     public ZooKeeper zooKeeper;
     private final ActorRef storageActor;
 
-    public Zoo(ZooKeeper zoo, ActorRef storage) throws IOException {
+    public Zoo(ZooKeeper zoo, ActorRef storage) throws IOException, KeeperException, InterruptedException {
         this.zooKeeper = zoo;
         this.storageActor = storage;
+        ArrayList<String> updatedServers = new ArrayList<>();
+        for (String c: zooKeeper.getChildren("/servers", null)) {
+            String port = new String(zooKeeper.getData("/servers/" + c, false, null));
+            updatedServers.add(port);
+        }
+        storageActor.tell(new RefreshServersMsg(updatedServers), ActorRef.noSender());
     }
 
     public void init(String port) throws KeeperException, InterruptedException {

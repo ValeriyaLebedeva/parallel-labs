@@ -32,7 +32,7 @@ public class Anonymizer {
     private static final String HOST = "localhost";
     private static final String QUERY_URL = "url";
     private static final String QUERY_COUNT = "count";
-    private static final Duration TIMEOUT = Duration.ofSeconds(10);
+    private static final Duration TIMEOUT = Duration.ofSeconds(15);
     public static int port;
     public static Http http;
     private static ActorRef storageActor;

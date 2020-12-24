@@ -43,10 +43,10 @@ public class Anonymizer {
         else {
             port = 2000 + random.nextInt(4000);
         }
-        System.out.printf("Port %d was chosen randomly: %d\n", port);
+        System.out.printf("Port %d was chosen randomly:\n", port);
         Zoo zoo = new Zoo(storageActor, ZOOKEEPER_ADDRESS);
         zoo.init(String.valueOf(port));
-        System.out.printf("Connected to zookeeper on the: %s", ZOOKEEPER_ADDRESS);
+        System.out.printf("Connected to zookeeper on the: %s\n", ZOOKEEPER_ADDRESS);
         final ActorMaterializer materializer = ActorMaterializer.create(actorSystem);
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =
                 createRoute().flow(actorSystem, materializer);

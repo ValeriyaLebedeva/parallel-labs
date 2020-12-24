@@ -43,7 +43,7 @@ public class Anonymizer {
         else {
             port = 2000 + random.nextInt(4000);
         }
-        System.out.printf("Port %d was chosen randomly:\n", port);
+        System.out.printf("Port %d was chosen randomly\n", port);
         Zoo zoo = new Zoo(storageActor, ZOOKEEPER_ADDRESS);
         zoo.init(String.valueOf(port));
         System.out.printf("Connected to zookeeper on the: %s\n", ZOOKEEPER_ADDRESS);

@@ -31,13 +31,6 @@ public class Zoo implements Watcher {
                 ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
     }
 
-//    public static Watcher watcher = watchedEvent -> {
-//        if (watchedEvent.getType() == Watcher.Event.EventType.NodeDataChanged ||
-//                watchedEvent.getType() == Watcher.Event.EventType.NodeDeleted ||
-//                watchedEvent.getType() == Watcher.Event.EventType.NodeDeleted) {
-//
-//        }
-//    };
 
     @Override
     public void process(WatchedEvent watchedEvent) {

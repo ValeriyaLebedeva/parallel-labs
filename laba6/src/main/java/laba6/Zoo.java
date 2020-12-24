@@ -17,7 +17,8 @@ public class Zoo implements Watcher {
     private static ActorRef storageActor;
 
     public Zoo(ActorRef storage, String address) throws IOException {
-        zooKeeper = new ZooKeeper(address, TIMEOUT, this);
+        
+        zooKeeper = new ZooKeeper(address, TIMEOUT, );
         storageActor = storage;
     }
 

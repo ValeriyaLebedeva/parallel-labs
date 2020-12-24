@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayList;
 
-public class Zoo {
+public class Zoo implements Watcher {
     private static final int TIMEOUT = (int)Duration.ofSeconds(10).getSeconds();
     public static ZooKeeper zooKeeper;
     private static ActorRef storageActor;
@@ -45,4 +45,8 @@ public class Zoo {
         }
     };
 
+    @Override
+    public void process(WatchedEvent watchedEvent) {
+
+    }
 }

@@ -23,18 +23,18 @@ public class Zoo implements Watcher {
     public void init(String port) throws KeeperException, InterruptedException {
         zooKeeper.create("/servers/" + port, (port+"").getBytes(),
                 ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
-        WatchedEvent e = new WatchedEvent(Watcher.Event.EventType.NodeCreated,
-                Watcher.Event.KeeperState.SyncConnected, "");
-        watcher.process(e);
+//        WatchedEvent e = new WatchedEvent(Watcher.Event.EventType.NodeCreated,
+//                Watcher.Event.KeeperState.SyncConnected, "");
+//        watcher.process(e);
     }
 
-    public static Watcher watcher = watchedEvent -> {
-        if (watchedEvent.getType() == Watcher.Event.EventType.NodeDataChanged ||
-                watchedEvent.getType() == Watcher.Event.EventType.NodeDeleted ||
-                watchedEvent.getType() == Watcher.Event.EventType.NodeDeleted) {
-
-        }
-    };
+//    public static Watcher watcher = watchedEvent -> {
+//        if (watchedEvent.getType() == Watcher.Event.EventType.NodeDataChanged ||
+//                watchedEvent.getType() == Watcher.Event.EventType.NodeDeleted ||
+//                watchedEvent.getType() == Watcher.Event.EventType.NodeDeleted) {
+//
+//        }
+//    };
 
     @Override
     public void process(WatchedEvent watchedEvent) {

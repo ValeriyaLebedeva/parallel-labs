@@ -54,10 +54,7 @@ public class Anonymizer {
             port = 2000 + random.nextInt(4000);
         }
         System.out.printf("Port %d was chosen randomly\n", port);
-        Watcher empty = new Watcher() {
-            @Override
-            public void process(WatchedEvent watchedEvent) {
-            }
+        Watcher empty = watchedEvent -> {
         };
         ZooKeeper zooKeeper = new ZooKeeper(ZOOKEEPER_ADDRESS, (int)TIMEOUT.getSeconds(), empty);
         Zoo zoo = new Zoo(zooKeeper, storageActor);

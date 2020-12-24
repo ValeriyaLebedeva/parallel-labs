@@ -32,23 +32,19 @@ public class Zoo implements Watcher {
         if (watchedEvent.getType() == Watcher.Event.EventType.NodeDataChanged ||
                 watchedEvent.getType() == Watcher.Event.EventType.NodeDeleted ||
                 watchedEvent.getType() == Watcher.Event.EventType.NodeDeleted) {
-            ArrayList<String> updatedServers = new ArrayList<>();
-            try {
-                for (String c: zooKeeper.getChildren("/servers", null)) {
-                    String port = new String(zooKeeper.getData("/servers/" + c, false, null));
-                    updatedServers.add(port);
-                }
-                storageActor.tell(new RefreshServersMsg(updatedServers), ActorRef.noSender());
-            } catch (KeeperException | InterruptedException e) {
-                e.printStackTrace();
-            }
+
         }
     };
 
     @Override
     public void process(WatchedEvent watchedEvent) {
         try {
-            sendServers();
+            ArrayList<String> updatedServers = new ArrayList<>();
+            for (String c: zooKeeper.getChildren("/servers", null)) {
+                String port = new String(zooKeeper.getData("/servers/" + c, false, null));
+                updatedServers.add(port);
+            }
+            storageActor.tell(new RefreshServersMsg(updatedServers), ActorRef.noSender());
         } catch (KeeperException | InterruptedException e) {
             e.printStackTrace();
         }

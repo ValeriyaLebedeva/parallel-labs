@@ -59,9 +59,9 @@ public class Anonymizer {
         ZooKeeper zooKeeper = new ZooKeeper(ZOOKEEPER_ADDRESS, (int)TIMEOUT.getSeconds(), empty);
         Zoo zoo = new Zoo(zooKeeper, storageActor);
         zoo.init(String.valueOf(port));
-//        System.out.printf("Connected to zookeeper on : %s\n", ZOOKEEPER_ADDRESS);
-//        final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =
-//                createRoute().flow(actorSystem, materializer);
+        System.out.printf("Connected to zookeeper on : %s\n", ZOOKEEPER_ADDRESS);
+        final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =
+                createRoute().flow(actorSystem, materializer);
 //        final CompletionStage<ServerBinding> binding = http.bindAndHandle(
 //                routeFlow,
 //                ConnectHttp.toHost(HOST, port),

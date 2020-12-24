@@ -4,6 +4,8 @@ import akka.NotUsed;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
 import akka.http.javadsl.ConnectHttp;
 import akka.http.javadsl.Http;
 import akka.http.javadsl.ServerBinding;
@@ -32,10 +34,12 @@ public class Anonymizer {
     private static ActorRef storageActor;
     private static final Random random = new Random();
     public static final String ZOOKEEPER_ADDRESS = "localhost:2181";
+    private static LoggingAdapter logger;
 
     public static void main(String[] argv) throws IOException, KeeperException, InterruptedException {
         ActorSystem actorSystem = ActorSystem.create("routes");
         http = Http.get(actorSystem);
+        logger = Logging.getLogger(actorSystem, System.out);
         storageActor = actorSystem.actorOf(Props.create(StorageActor.class));
         if (argv.length > 0) {
             port = Integer.parseInt(argv[0]);

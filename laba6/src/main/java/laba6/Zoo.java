@@ -1,6 +1,7 @@
 package laba6;
 
 import akka.actor.ActorRef;
+import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import org.apache.zookeeper.*;
 
@@ -13,8 +14,6 @@ public class Zoo {
     private static final int TIMEOUT = (int)Duration.ofSeconds(5).getSeconds();
     public static ZooKeeper zooKeeper;
     private static ActorRef storageActor;
-    private static LoggingAdapter logger;
-
 
     public Zoo(ActorRef storage, String address) throws IOException {
         zooKeeper = new ZooKeeper(address, TIMEOUT, watcher);

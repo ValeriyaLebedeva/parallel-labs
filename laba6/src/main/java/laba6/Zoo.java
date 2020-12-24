@@ -13,19 +13,17 @@ import java.util.ArrayList;
 
 public class Zoo implements Watcher {
     private static final int TIMEOUT = (int)Duration.ofSeconds(10).getSeconds();
-    public static ZooKeeper zooKeeper;
-    private static ActorRef storageActor;
+    public ZooKeeper zooKeeper;
+    private final ActorRef storageActor;
 
-    public Zoo(ActorRef storage, String address) throws IOException {
-        
+    public Zoo(ZooKeeper zoo, ActorRef storage) throws IOException {
+        this.zooKeeper = zoo;
+        this.storageActor = storage;
     }
 
     public void init(String port) throws KeeperException, InterruptedException {
         zooKeeper.create("/servers/localohost:" + port, port.getBytes(StandardCharsets.UTF_8),
                 ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
-//        WatchedEvent e = new WatchedEvent(Watcher.Event.EventType.NodeCreated,
-//                Watcher.Event.KeeperState.SyncConnected, "");
-//        watcher.process(e);
     }
 
 //    public static Watcher watcher = watchedEvent -> {

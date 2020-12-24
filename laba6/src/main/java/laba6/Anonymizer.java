@@ -59,7 +59,7 @@ public class Anonymizer {
             public void process(WatchedEvent watchedEvent) {
             }
         };
-        ZooKeeper zooKeeper = new ZooKeeper(ZOOKEEPER_ADDRESS, TIMEOUT, empty);
+        ZooKeeper zooKeeper = new ZooKeeper(ZOOKEEPER_ADDRESS, (int)TIMEOUT.getSeconds(), empty);
         Zoo zoo = new Zoo(zooKeeper, storageActor);
         zoo.init(String.valueOf(port));
         System.out.printf("Connected to zookeeper on : %s\n", ZOOKEEPER_ADDRESS);

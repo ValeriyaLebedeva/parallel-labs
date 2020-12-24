@@ -12,7 +12,6 @@ import java.time.Duration;
 import java.util.ArrayList;
 
 public class Zoo implements Watcher {
-    private static final int TIMEOUT = (int)Duration.ofSeconds(10).getSeconds();
     public ZooKeeper zooKeeper;
     private final ActorRef storageActor;
 

@@ -22,7 +22,7 @@ public class Zoo implements Watcher {
     }
 
     public void init(String port) throws KeeperException, InterruptedException {
-        zooKeeper.create("/servers/localohost:" + port, (port+"").getBytes(),
+        zooKeeper.create("/servers/localohost:" + port, port.getBytes(StandardCharsets.UTF_8),
                 ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
 //        WatchedEvent e = new WatchedEvent(Watcher.Event.EventType.NodeCreated,
 //                Watcher.Event.KeeperState.SyncConnected, "");

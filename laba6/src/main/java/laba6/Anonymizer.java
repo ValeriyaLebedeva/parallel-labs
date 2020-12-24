@@ -59,8 +59,8 @@ public class Anonymizer {
             public void process(WatchedEvent watchedEvent) {
             }
         };
-        zooKeeper = new ZooKeeper(address, TIMEOUT, empty);
-        storageActor = storage;
+        ZooKeeper zooKeeper = new ZooKeeper(ZOOKEEPER_ADDRESS, TIMEOUT, empty);
+        Zoo zoo = new Zoo(zooKeeper, storageActor);
         zoo.init(String.valueOf(port));
         System.out.printf("Connected to zookeeper on : %s\n", ZOOKEEPER_ADDRESS);
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =

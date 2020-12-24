@@ -90,8 +90,8 @@ public class Anonymizer {
                                     .thenCompose(nextPort ->
                                             fetch(
                                                     String.format(
-                                                            "http://%s:%s?url=%s&count=%d",
-                                                            HOST, nextPort, url, count - 1)
+                                                            "http://%s?url=%s&count=%d",
+                                                            nextPort, url, count - 1)
                                             )
                                     )
                             );

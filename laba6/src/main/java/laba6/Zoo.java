@@ -11,7 +11,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 
 public class Zoo {
-    private static final int TIMEOUT = (int)Duration.ofSeconds(5).getSeconds();
+    private static final int TIMEOUT = (int)Duration.ofSeconds(10).getSeconds();
     public static ZooKeeper zooKeeper;
     private static ActorRef storageActor;
 
